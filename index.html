@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Integration of QSAR, Bioinformatics and Machine Learning for Cancer Drug Discovery | EGFR Platform</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg" />
+  <meta name="description" content="An interactive computational biology platform integrating QSAR, molecular descriptors, and machine learning for EGFR-targeted cancer drug discovery." />
+  
+  <!-- External CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+  
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar" id="app-sidebar" aria-label="Main Navigation">
+      <div class="sidebar-header">
+        <div class="logo-badge">EG</div>
+        <div class="sidebar-title">
+          <h1>EGFR · QSAR · ML</h1>
+          <p>Cancer Drug Discovery</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <span class="nav-category">Main Dashboard</span>
+        <a class="nav-item active" data-target="overview" role="button">
+          <span class="nav-icon">📊</span>
+          <span>1. Overview</span>
+        </a>
+        <a class="nav-item" data-target="cancer-target" role="button">
+          <span class="nav-icon">🧬</span>
+          <span>2. Cancer Target (EGFR)</span>
+        </a>
+
+        <span class="nav-category">Data &amp; Exploration</span>
+        <a class="nav-item" data-target="dataset-explorer" role="button">
+          <span class="nav-icon">📂</span>
+          <span>3. Dataset Explorer</span>
+        </a>
+        <a class="nav-item" data-target="molecular-analysis" role="button">
+          <span class="nav-icon">⚗️</span>
+          <span>4. Molecular Analysis</span>
+        </a>
+
+        <span class="nav-category">Machine Learning</span>
+        <a class="nav-item" data-target="qsar-modeling" role="button">
+          <span class="nav-icon">⚙️</span>
+          <span>5. QSAR Modeling</span>
+        </a>
+        <a class="nav-item" data-target="model-results" role="button">
+          <span class="nav-icon">📈</span>
+          <span>6. Model Results</span>
+        </a>
+        <a class="nav-item" data-target="prediction" role="button">
+          <span class="nav-icon">🎯</span>
+          <span>7. Activity Prediction</span>
+        </a>
+        <a class="nav-item" data-target="candidate-ranking" role="button">
+          <span class="nav-icon">🏆</span>
+          <span>8. Candidate Ranking</span>
+        </a>
+
+        <span class="nav-category">Scientific Defense</span>
+        <a class="nav-item" data-target="bioinformatics" role="button">
+          <span class="nav-icon">🔬</span>
+          <span>9. Bioinformatics</span>
+        </a>
+        <a class="nav-item" data-target="methodology" role="button">
+          <span class="nav-icon">📑</span>
+          <span>10. Methodology</span>
+        </a>
+        <a class="nav-item" data-target="viva-defense" role="button">
+          <span class="nav-icon">💡</span>
+          <span>11. Viva Voce / FAQ</span>
+        </a>
+        <a class="nav-item" data-target="about-report" role="button">
+          <span class="nav-icon">📖</span>
+          <span>12. Report &amp; Sources</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <p>B.Tech Biotechnology &amp; Bioinformatics</p>
+        <p class="text-xs text-muted mt-1">Client-Side Computational Engine</p>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="app-main">
+      
+      <!-- Top Bar -->
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle navigation menu">☰</button>
+          <span class="top-bar-title">Computational Anticancer Screening Platform</span>
+          <span class="target-badge">Target: EGFR (ErbB1 / HER1)</span>
+        </div>
+        <div class="top-bar-right">
+          <button class="btn btn-secondary btn-sm" id="load-default-dataset-btn">
+            🔄 Reset Benchmark Data
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="UI.navigateTo('prediction')">
+            🎯 Test Candidate
+          </button>
+        </div>
+      </header>
+
+      <!-- Scrollable Main Container -->
+      <div class="main-content" id="main-content">
+
+        <!-- ==========================================
+             SECTION 1: OVERVIEW DASHBOARD
+             ========================================== -->
+        <section class="app-section active" id="overview">
+          <div class="section-header">
+            <div>
+              <h2>Integration of QSAR, Bioinformatics and Machine Learning for Cancer Drug Discovery</h2>
+              <p class="section-subtitle">An interactive computational workflow for EGFR-targeted anticancer activity analysis</p>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn btn-outline-cyan btn-sm" onclick="UI.navigateTo('qsar-modeling')">Configure ML Model →</button>
+            </div>
+          </div>
+
+          <!-- KPI Summary Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <span class="kpi-title">Compounds Loaded</span>
+              <span class="kpi-value" id="kpi-compounds-count">120</span>
+              <span class="kpi-desc">Verified ChEMBL kinase bioassays</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-title">Molecular Descriptors</span>
+              <span class="kpi-value" id="kpi-descriptors-count">9 Descriptors</span>
+              <span class="kpi-desc">Physicochemical &amp; Constitutional</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-title">Primary Target</span>
+              <span class="kpi-value" id="kpi-target-label" style="font-size: 18px; margin-top: 10px;">EGFR Kinase</span>
+              <span class="kpi-desc">ChEMBL Target: CHEMBL203</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-title">Bioactive Leads</span>
+              <span class="kpi-value text-emerald" id="kpi-active-count">—</span>
+              <span class="kpi-desc">pIC₅₀ ≥ 7.0 (IC₅₀ ≤ 100 nM)</span>
+            </div>
+          </div>
+
+          <!-- Interactive Drug Discovery Workflow Pathway -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Interactive Computational Drug Discovery Workflow</div>
+              <div class="card-subtitle">Click any stage to inspect the pipeline</div>
+            </div>
+            <div class="workflow-pipeline">
+              <div class="pipeline-step" data-workflow-nav="cancer-target">
+                <div class="step-icon">🧬</div>
+                <div class="step-label">1. Cancer Target</div>
+              </div>
+              <div class="pipeline-arrow">→</div>
+              <div class="pipeline-step" data-workflow-nav="dataset-explorer">
+                <div class="step-icon">📂</div>
+                <div class="step-label">2. Compound Dataset</div>
+              </div>
+              <div class="pipeline-arrow">→</div>
+              <div class="pipeline-step" data-workflow-nav="molecular-analysis">
+                <div class="step-icon">⚗️</div>
+                <div class="step-label">3. Molecular Descriptors</div>
+              </div>
+              <div class="pipeline-arrow">→</div>
+              <div class="pipeline-step" data-workflow-nav="qsar-modeling">
+                <div class="step-icon">⚙️</div>
+                <div class="step-label">4. QSAR &amp; ML Model</div>
+              </div>
+              <div class="pipeline-arrow">→</div>
+              <div class="pipeline-step" data-workflow-nav="model-results">
+                <div class="step-icon">📈</div>
+                <div class="step-label">5. Model Validation</div>
+              </div>
+              <div class="pipeline-arrow">→</div>
+              <div class="pipeline-step" data-workflow-nav="prediction">
+                <div class="step-icon">🎯</div>
+                <div class="step-label">6. Activity Prediction</div>
+              </div>
+              <div class="pipeline-arrow">→</div>
+              <div class="pipeline-step" data-workflow-nav="candidate-ranking">
+                <div class="step-icon">🏆</div>
+                <div class="step-label">7. Prioritization</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Educational Overview & Scientific Framework -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">What is QSAR? (Quantitative Structure-Activity Relationship)</div>
+              </div>
+              <p class="text-secondary mb-3 leading-relaxed">
+                <strong>QSAR</strong> is a computational methodology that seeks to mathematically relate the chemical structure of molecules—represented through numerical <em>molecular descriptors</em> (e.g., molecular weight, partition coefficient, topological polar surface area, hydrogen bond counts)—to their measured biological activity (such as the concentration required to inhibit an oncogenic enzyme by 50%, $IC_{50}$).
+              </p>
+              <p class="text-secondary leading-relaxed">
+                By training machine learning models on characterized structural libraries, computational researchers can prioritize potent drug candidates, optimize lead compounds, and reduce the need for exhaustive high-throughput wet-lab screening.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Why EGFR (Epidermal Growth Factor Receptor)?</div>
+              </div>
+              <p class="text-secondary mb-3 leading-relaxed">
+                <strong>EGFR</strong> (also known as HER1 or ErbB-1) is a transmembrane receptor tyrosine kinase that governs essential cellular growth, differentiation, and survival signaling networks.
+              </p>
+              <p class="text-secondary leading-relaxed">
+                In numerous malignancies—most notably non-small cell lung cancer (NSCLC), glioblastoma, and colorectal carcinomas—EGFR is frequently mutated or overexpressed, driving autonomous oncogenic proliferation. Small-molecule tyrosine kinase inhibitors (TKIs) like Gefitinib, Erlotinib, and Osimertinib competitively target its ATP-binding catalytic cleft.
+              </p>
+            </div>
+          </div>
+
+          <div class="scientific-disclaimer-box mt-4">
+            <span class="disclaimer-badge">Academic &amp; Regulatory Notice</span>
+            <p class="text-xs text-muted mt-2 leading-relaxed">
+              This application is designed as an educational, interactive computational platform for academic biotechnology demonstration. Model-derived outputs represent <strong>predicted mathematical affinities</strong>. They do not constitute clinical efficacy, biochemical proof of action, or safety in human beings. Every computationally prioritized candidate strictly requires rigorous wet-lab biochemical assays (e.g. TR-FRET kinase assays, cellular IC₅₀ assays) before advancement.
+            </p>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 2: CANCER TARGET (EGFR)
+             ========================================== -->
+        <section class="app-section" id="cancer-target">
+          <div class="section-header">
+            <div>
+              <h2>Epidermal Growth Factor Receptor (EGFR) as an Oncogenic Target</h2>
+              <p class="section-subtitle">Biological mechanism, kinase domain architecture, signaling pathways, and resistance mutations</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">EGFR Signaling Cascade &amp; Kinase Inhibition Architecture</div>
+            </div>
+            <div style="width: 100%; height: 380px; display: flex; justify-content: center; align-items: center; background: #0b1120; border-radius: 8px; overflow: hidden; padding: 10px;">
+              <img src="assets/images/egfr_pathway.svg" alt="EGFR Signaling Pathway and Drug Inhibition Mechanism" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">1. Receptor Biology &amp; Activation</div>
+              </div>
+              <p class="text-secondary text-sm leading-relaxed">
+                EGFR is a 170 kDa transmembrane glycoprotein belonging to the ErbB family of receptor tyrosine kinases. Extracellular ligand binding (e.g. EGF, TGF-α) induces receptor homo- or heterodimerization, triggering trans-autophosphorylation of key tyrosine residues in the cytoplasmic tail (e.g., Tyr1068, Tyr1173).
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">2. Downstream Oncogenic Cascades</div>
+              </div>
+              <p class="text-secondary text-sm leading-relaxed">
+                Phosphorylated tyrosines recruit SH2/PTB domain-containing adaptor proteins, initiating three major signaling cascades:
+              </p>
+              <ul class="text-secondary text-xs mt-2 space-y-1 pl-4 list-disc">
+                <li><strong>RAS-RAF-MEK-ERK:</strong> Promotes cell-cycle progression and proliferation.</li>
+                <li><strong>PI3K-AKT-mTOR:</strong> Drives cellular survival and inhibits apoptosis.</li>
+                <li><strong>JAK-STAT:</strong> Enhances tumor invasion, metastasis, and angiogenesis.</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">3. TKI Generations &amp; Mutations</div>
+              </div>
+              <p class="text-secondary text-sm leading-relaxed">
+                <strong>1st Gen (Reversible):</strong> Gefitinib &amp; Erlotinib bind ATP cleft; highly effective against sensitizing mutations (exon 19 del, L858R).<br /><br />
+                <strong>2nd Gen (Irreversible):</strong> Afatinib binds covalently to Cys797.<br /><br />
+                <strong>3rd Gen (Mutant-Selective):</strong> Osimertinib overcomes the gatekeeper <strong>T790M</strong> resistance mutation.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 3: DATASET EXPLORER
+             ========================================== -->
+        <section class="app-section" id="dataset-explorer">
+          <div class="section-header">
+            <div>
+              <h2>EGFR Inhibitor Dataset Explorer</h2>
+              <p class="section-subtitle">Inspect, search, sort, filter, and upload compound bioactivity datasets</p>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn btn-secondary btn-sm" id="export-dataset-csv-btn">📥 Export Filtered CSV</button>
+            </div>
+          </div>
+
+          <!-- CSV Upload Area -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <div class="card-title">Upload Custom Compound Dataset (CSV)</div>
+              <div class="card-subtitle">Drag and drop or select a file to calculate descriptors and test models</div>
+            </div>
+            <div class="csv-drop-zone" id="csv-drop-zone">
+              <div class="drop-icon">📁</div>
+              <p class="font-semibold text-secondary">Drag and drop your CSV file here, or click to browse</p>
+              <p class="text-xs text-muted mt-1">Accepts CSV with SMILES, compound identifiers, and experimental IC₅₀ or pIC₅₀ values.</p>
+              <input type="file" id="csv-file-input" accept=".csv" style="display: none;" />
+            </div>
+          </div>
+
+          <!-- Search & Filter Controls -->
+          <div class="card">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <div class="flex items-center gap-3 flex-1 min-w-[240px]">
+                <input type="text" id="dataset-search-input" class="form-control" placeholder="Search by Compound ID, Name, or SMILES..." />
+              </div>
+              <div class="flex items-center gap-2">
+                <select id="dataset-activity-filter" class="form-select text-xs">
+                  <option value="all">All Activity Tiers</option>
+                  <option value="active">Active (pIC₅₀ ≥ 7.0)</option>
+                  <option value="intermediate">Intermediate (6.0 ≤ pIC₅₀ &lt; 7.0)</option>
+                  <option value="inactive">Inactive (pIC₅₀ &lt; 6.0)</option>
+                </select>
+                <select id="dataset-page-size" class="form-select text-xs w-28">
+                  <option value="10">10 / page</option>
+                  <option value="25">25 / page</option>
+                  <option value="50">50 / page</option>
+                </select>
+                <span class="badge badge-active" id="dataset-count-badge">Loading...</span>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive">
+              <table class="table-custom">
+                <thead id="dataset-table-head">
+                  <tr>
+                    <th data-sort="compound_id">ID ↕</th>
+                    <th data-sort="compound_name">Compound ↕</th>
+                    <th>SMILES Structure</th>
+                    <th data-sort="pic50">pIC₅₀ ↕</th>
+                    <th data-sort="activity_value">IC₅₀ (nM) ↕</th>
+                    <th>Bioactivity Tier</th>
+                    <th data-sort="molecular_weight">MW (Da) ↕</th>
+                    <th data-sort="logP">LogP ↕</th>
+                    <th data-sort="tpsa">TPSA (Å²) ↕</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="dataset-table-body">
+                  <tr>
+                    <td colspan="10" class="text-center py-8 text-muted">Loading EGFR bioactivity dataset...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Pagination Footer -->
+            <div class="table-pagination">
+              <span id="dataset-pagination-info">Page 1 of 1</span>
+              <div class="flex gap-2">
+                <button class="btn btn-secondary btn-sm" id="dataset-prev-page">Previous</button>
+                <button class="btn btn-secondary btn-sm" id="dataset-next-page">Next</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 4: MOLECULAR ANALYSIS
+             ========================================== -->
+        <section class="app-section" id="molecular-analysis">
+          <div class="section-header">
+            <div>
+              <h2>Molecular Descriptor Distributions &amp; Chemical Space Analysis</h2>
+              <p class="section-subtitle">Chemoinformatics profiling, distribution histograms, 2D PCA projection, and descriptor correlations</p>
+            </div>
+          </div>
+
+          <!-- Preprocessing Pipeline Stats Banner -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <div class="card-title">Data Preprocessing &amp; Curation Pipeline Statistics</div>
+              <div class="card-subtitle">Automated unit normalization and chemical descriptor integrity audit</div>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+              <div class="p-3 bg-slate-900 rounded border border-slate-800">
+                <span class="text-xs text-muted uppercase font-semibold">Raw Ingested</span>
+                <div class="text-xl font-bold font-mono text-slate-100" id="stat-raw-rows">—</div>
+              </div>
+              <div class="p-3 bg-slate-900 rounded border border-slate-800">
+                <span class="text-xs text-muted uppercase font-semibold">Duplicates Pruned</span>
+                <div class="text-xl font-bold font-mono text-amber" id="stat-duplicates-removed">—</div>
+              </div>
+              <div class="p-3 bg-slate-900 rounded border border-slate-800">
+                <span class="text-xs text-muted uppercase font-semibold">Invalid / Incomplete</span>
+                <div class="text-xl font-bold font-mono text-red" id="stat-invalid-removed">—</div>
+              </div>
+              <div class="p-3 bg-slate-900 rounded border border-slate-800">
+                <span class="text-xs text-muted uppercase font-semibold">Curation Pass</span>
+                <div class="text-xl font-bold font-mono text-emerald" id="stat-final-rows">—</div>
+              </div>
+            </div>
+            <div class="mt-3 p-3 bg-slate-950 rounded text-xs text-secondary border border-slate-800">
+              <span class="font-bold text-cyan">Preprocessing Pipeline Log:</span>
+              <ul class="list-disc pl-5 mt-1 space-y-0.5 text-muted" id="preprocessing-log-list">
+                <li>Awaiting dataset initialization...</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Visualizations Grid -->
+          <div class="chart-grid">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Bioactivity Distribution (pIC₅₀)</div>
+              </div>
+              <div class="chart-container">
+                <canvas id="chart-pic50-dist"></canvas>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Molecular Weight (MW) Distribution</div>
+              </div>
+              <div class="chart-container">
+                <canvas id="chart-mw-dist"></canvas>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Lipophilicity (LogP) Distribution</div>
+              </div>
+              <div class="chart-container">
+                <canvas id="chart-logp-dist"></canvas>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Polar Surface Area (TPSA) Distribution</div>
+              </div>
+              <div class="chart-container">
+                <canvas id="chart-tpsa-dist"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- PCA 2D Chemical Space Projection -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <div class="card-title">Principal Component Analysis (PCA) 2D Chemical Space</div>
+              <div class="card-subtitle">Projection of 9 standardized molecular descriptors onto orthogonal eigenvectors PC1 &amp; PC2</div>
+            </div>
+            <div class="chart-container" style="height: 380px;">
+              <canvas id="chart-pca"></canvas>
+            </div>
+          </div>
+
+          <!-- Pearson Correlation Heatmap Table -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Descriptor Pearson Correlation Matrix (r)</div>
+              <div class="card-subtitle">Examine collinearity between physicochemical features (r ranges from -1.0 to +1.0)</div>
+            </div>
+            <div class="table-responsive" id="correlation-matrix-container">
+              <p class="text-center py-4 text-muted">Calculating correlation matrix...</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 5: QSAR MODELING
+             ========================================== -->
+        <section class="app-section" id="qsar-modeling">
+          <div class="section-header">
+            <div>
+              <h2>QSAR Model Configuration &amp; Machine Learning Training</h2>
+              <p class="section-subtitle">Select target endpoint, input molecular descriptors, training algorithm, and cross-validation protocol</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <!-- Left 2 Cols: Form Setup -->
+            <div class="lg:col-span-2 space-y-4">
+              
+              <!-- Features Selection -->
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">1. Feature Selection (Molecular Descriptors)</div>
+                  <div class="flex gap-2">
+                    <button class="btn btn-secondary btn-sm" id="select-all-features-btn">Select All</button>
+                    <button class="btn btn-secondary btn-sm" id="deselect-all-features-btn">Deselect</button>
+                  </div>
+                </div>
+                <div class="checkbox-grid" id="feature-checkbox-container">
+                  <!-- Populated dynamically by app.js -->
+                </div>
+              </div>
+
+              <!-- Hyperparameters & Split -->
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">2. Algorithm &amp; Data Splitting Protocol</div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="form-group">
+                    <label class="form-label" for="model-algorithm-select">Machine Learning Algorithm</label>
+                    <select id="model-algorithm-select" class="form-select">
+                      <option value="randomForest" selected>Random Forest Regressor (Decision Tree Ensemble)</option>
+                      <option value="linear">Multiple Linear Regression (OLS with L2)</option>
+                      <option value="ridge">Ridge Regression (L2 Regularization)</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="train-test-split-select">Train / Test Split Ratio</label>
+                    <select id="train-test-split-select" class="form-select">
+                      <option value="0.2" selected>80% Training / 20% Testing</option>
+                      <option value="0.25">75% Training / 25% Testing</option>
+                      <option value="0.3">70% Training / 30% Testing</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="cross-validation-select">Internal Validation (K-Fold CV)</label>
+                    <select id="cross-validation-select" class="form-select">
+                      <option value="5" selected>5-Fold Cross-Validation</option>
+                      <option value="10">10-Fold Cross-Validation</option>
+                      <option value="0">None (Holdout Test Only)</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="random-seed-input">Deterministic Random Seed</label>
+                    <input type="number" id="random-seed-input" class="form-control" value="42" min="1" max="99999" />
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Right Col: Execution & Safety Protocol -->
+            <div class="space-y-4">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Model Execution</div>
+                </div>
+                <p class="text-secondary text-xs mb-4 leading-relaxed">
+                  Clicking the button executes in-browser data partitioning, StandardScaler parameter fitting (preventing data leakage), regression solving, K-fold validation, and metric synthesis.
+                </p>
+                <button class="btn btn-primary w-full py-3 text-sm" id="train-model-btn">
+                  🚀 Train QSAR Model
+                </button>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Methodological Guardrails</div>
+                </div>
+                <ul class="text-xs text-secondary space-y-2 pl-4 list-disc">
+                  <li><strong>Data Leakage Prevention:</strong> Feature scaler parameters ($\mu, \sigma$) are derived strictly from the training partition.</li>
+                  <li><strong>Reproducibility:</strong> A Mulberry32 PRNG guarantees identical train/test splits across identical seeds.</li>
+                  <li><strong>True Ensembling:</strong> The Random Forest regressor builds an authentic array of randomized Decision Trees with variance-reduction split finding.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 6: MODEL RESULTS
+             ========================================== -->
+        <section class="app-section" id="model-results">
+          <div class="section-header">
+            <div>
+              <h2>QSAR Model Results &amp; Validation Performance</h2>
+              <p class="section-subtitle">Evaluate statistical metrics, Actual vs. Predicted regression, residual spread, and feature importance</p>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn btn-secondary btn-sm" id="export-metrics-csv-btn">📥 Export Model Metrics</button>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div class="card text-center py-12" id="model-results-empty-state" style="display: none;">
+            <div class="text-4xl mb-3">⚙️</div>
+            <h3 class="text-lg font-bold text-slate-200">No Model Trained Yet</h3>
+            <p class="text-xs text-muted max-w-md mx-auto mt-2">
+              Please go to the QSAR Modeling tab and click "Train QSAR Model" to fit algorithms to the EGFR dataset.
+            </p>
+            <button class="btn btn-primary btn-sm mt-4" onclick="UI.navigateTo('qsar-modeling')">Go to QSAR Modeling →</button>
+          </div>
+
+          <!-- Active Container -->
+          <div id="model-results-active-container">
+            <!-- Metric KPI Cards -->
+            <div class="kpi-grid">
+              <div class="kpi-card">
+                <span class="kpi-title">Test Coefficient of Determination (R²)</span>
+                <span class="kpi-value text-cyan" id="metric-r2-val">—</span>
+                <span class="kpi-desc">Proportion of variance explained</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-title">Root Mean Squared Error (RMSE)</span>
+                <span class="kpi-value text-amber" id="metric-rmse-val">—</span>
+                <span class="kpi-desc">Residual standard deviation</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-title">Mean Absolute Error (MAE)</span>
+                <span class="kpi-value text-teal" id="metric-mae-val">—</span>
+                <span class="kpi-desc">Average magnitude of errors</span>
+              </div>
+              <div class="kpi-card">
+                <span class="kpi-title">Mean Squared Error (MSE)</span>
+                <span class="kpi-value" id="metric-mse-val">—</span>
+                <span class="kpi-desc">Squared prediction dispersion</span>
+              </div>
+            </div>
+
+            <!-- Additional Validation Banner -->
+            <div class="card mb-4">
+              <div class="flex flex-wrap justify-between items-center text-xs text-secondary gap-3">
+                <span id="model-split-info">Training: — compounds | Test: — compounds</span>
+                <span id="model-cv-info" class="text-cyan">Cross-validation score calculating...</span>
+                <span>Training R²: <strong id="metric-train-r2-val" class="font-mono text-slate-200">—</strong></span>
+              </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="chart-grid">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Actual vs. Predicted pIC₅₀ (Test Set)</div>
+                </div>
+                <div class="chart-container">
+                  <canvas id="chart-actual-vs-pred"></canvas>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Residual Distribution (Error vs. Predicted)</div>
+                </div>
+                <div class="chart-container">
+                  <canvas id="chart-residuals"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="chart-grid">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">QSAR Feature Importance Weights</div>
+                  <div class="card-subtitle">Contribution of molecular descriptors to variance reduction</div>
+                </div>
+                <div class="chart-container">
+                  <canvas id="chart-feature-importance"></canvas>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Model Benchmark Comparison</div>
+                  <div class="card-subtitle">Comparative evaluation across trained iterations</div>
+                </div>
+                <div class="chart-container">
+                  <canvas id="chart-model-benchmark"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Model Benchmark History Table -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Model Performance Benchmark Summary</div>
+              </div>
+              <div class="table-responsive">
+                <table class="table-custom">
+                  <thead>
+                    <tr>
+                      <th>Algorithm</th>
+                      <th>Test R² ↕</th>
+                      <th>RMSE ↕</th>
+                      <th>MAE ↕</th>
+                      <th>Train R²</th>
+                      <th>K-Fold CV Mean (±SD)</th>
+                      <th>Train/Test Split</th>
+                    </tr>
+                  </thead>
+                  <tbody id="model-comparison-table-body">
+                    <tr>
+                      <td colspan="7" class="text-center py-4 text-muted">Awaiting model execution...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 7: PREDICTION
+             ========================================== -->
+        <section class="app-section" id="prediction">
+          <div class="section-header">
+            <div>
+              <h2>Single Compound Activity Prediction &amp; Profiling</h2>
+              <p class="section-subtitle">Input SMILES string, compute descriptors, render 2D structure, and estimate pIC₅₀ against EGFR</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <!-- Left Col: Input Controls -->
+            <div class="space-y-4">
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">Molecular Structure Input</div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="predict-sample-select">Load an Authentic EGFR Inhibitor Preset</label>
+                  <select id="predict-sample-select" class="form-select">
+                    <!-- Populated dynamically -->
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="predict-name-input">Compound Name / ID</label>
+                  <input type="text" id="predict-name-input" class="form-control" placeholder="e.g. Gefitinib or Candidate-X" value="Gefitinib (Iressa)" />
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="predict-smiles-input">SMILES Chemical String</label>
+                  <input type="text" id="predict-smiles-input" class="form-control font-mono text-xs" placeholder="e.g. COc1cc2ncnc(Nc3ccc(F)c(Cl)c3)c2cc1OCCCN1CCOCC1" value="COc1cc2ncnc(Nc3ccc(F)c(Cl)c3)c2cc1OCCCN1CCOCC1" />
+                </div>
+
+                <button class="btn btn-primary w-full py-2.5" id="run-prediction-btn">
+                  🧪 Compute Descriptors &amp; Predict Activity
+                </button>
+              </div>
+
+              <!-- 2D Structure Canvas -->
+              <div class="card">
+                <div class="card-header">
+                  <div class="card-title">2D Chemical Structure Visualization</div>
+                  <div class="card-subtitle">Deterministic chemical graph layout</div>
+                </div>
+                <div class="structure-render-box">
+                  <canvas id="predict-structure-canvas" width="460" height="240"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Col: Output Result Card -->
+            <div>
+              <div class="card" id="prediction-output-card">
+                <div class="text-center py-16 text-muted">
+                  <div class="text-3xl mb-2">⚗️</div>
+                  <p class="font-medium">Enter a SMILES string and click "Compute Descriptors &amp; Predict Activity".</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 8: CANDIDATE RANKING
+             ========================================== -->
+        <section class="app-section" id="candidate-ranking">
+          <div class="section-header">
+            <div>
+              <h2>Computationally Prioritized Lead Candidates</h2>
+              <p class="section-subtitle">High-throughput virtual screening &amp; ranking by model-estimated biological activity</p>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn btn-primary btn-sm" id="run-candidate-ranking-btn">🔄 Re-Rank Candidates</button>
+              <button class="btn btn-secondary btn-sm" id="export-candidates-csv-btn">📥 Export Rankings CSV</button>
+            </div>
+          </div>
+
+          <div class="card mb-4">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <div class="flex items-center gap-3 flex-1 min-w-[240px]">
+                <input type="text" id="candidate-search-input" class="form-control" placeholder="Search candidate by name or ID..." />
+              </div>
+              <div class="flex items-center gap-2">
+                <select id="candidate-page-size" class="form-select text-xs w-28">
+                  <option value="10">10 / page</option>
+                  <option value="25">25 / page</option>
+                  <option value="50">50 / page</option>
+                </select>
+                <span class="badge badge-active" id="candidate-count-badge">0 prioritized</span>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table-custom">
+                <thead id="candidate-table-head">
+                  <tr>
+                    <th>Rank</th>
+                    <th data-sort="compound_id">ID ↕</th>
+                    <th data-sort="compound_name">Compound Name ↕</th>
+                    <th data-sort="predicted_pic50">Predicted pIC₅₀ ↕</th>
+                    <th>Estimated IC₅₀</th>
+                    <th>Predicted Status</th>
+                    <th data-sort="actual_pic50">Experimental pIC₅₀</th>
+                    <th>Δ (Pred - Actual)</th>
+                  </tr>
+                </thead>
+                <tbody id="candidate-table-body">
+                  <tr>
+                    <td colspan="8" class="text-center py-8 text-muted">Awaiting ranking calculation...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="table-pagination">
+              <span id="candidate-pagination-info">Page 1 of 1</span>
+              <div class="flex gap-2">
+                <button class="btn btn-secondary btn-sm" id="candidate-prev-page">Previous</button>
+                <button class="btn btn-secondary btn-sm" id="candidate-next-page">Next</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="scientific-disclaimer-box">
+            <span class="disclaimer-badge">Computational Screening Principle</span>
+            <p class="text-xs text-muted mt-2 leading-relaxed">
+              Prioritized compounds are ordered by <strong>predicted mathematical binding potency (pIC₅₀)</strong>. High predicted affinity does not substitute for pharmacokinetic ADMET evaluation, cellular selectivity across the kinome, or experimental in vitro IC₅₀ validation.
+            </p>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 9: BIOINFORMATICS
+             ========================================== -->
+        <section class="app-section" id="bioinformatics">
+          <div class="section-header">
+            <div>
+              <h2>Bioinformatics Integration in Cancer Drug Discovery</h2>
+              <p class="section-subtitle">Bridging genomics, structural proteomics, chemical informatics, and statistical modeling</p>
+            </div>
+          </div>
+
+          <div class="card mb-4">
+            <div class="card-header">
+              <div class="card-title">How This Platform Qualifies as Bioinformatics</div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-secondary text-sm leading-relaxed">
+              <div class="p-3 bg-slate-900 rounded border border-slate-800">
+                <h4 class="text-cyan font-semibold mb-2">1. Biological Data</h4>
+                <p>UniProt sequence annotations (P00533), catalytic kinase domain boundaries (residues 695–1022), and clinical gatekeeper point mutations (L858R, T790M, C797S) defining target vulnerability.</p>
+              </div>
+              <div class="p-3 bg-slate-900 rounded border border-slate-800">
+                <h4 class="text-teal font-semibold mb-2">2. Chemical Data</h4>
+                <p>SMILES linear representations, 2D topology graphs, atomic valency matrices, and chemoinformatics descriptors representing physicochemical properties.</p>
+              </div>
+              <div class="p-3 bg-slate-900 rounded border border-slate-800">
+                <h4 class="text-blue font-semibold mb-2">3. Computational Analysis</h4>
+                <p>Closed-form Ridge regression, Random Forest ensemble bagging, Z-score feature scaling, K-fold cross-validation, and applicability domain boundary assessment.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Structural Biology: EGFR Kinase Active Site Architecture</div>
+            </div>
+            <p class="text-secondary text-sm leading-relaxed mb-3">
+              The catalytic kinase domain of EGFR adopts an active conformation characterized by the inward rotation of the αC-helix ("αC-in") and the correct alignment of the regulatory spine (R-spine). Small-molecule TKIs bind within the deep hydrophobic pocket adjacent to the adenine-binding region of ATP:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-secondary">
+              <div class="p-3 bg-slate-950 rounded border border-slate-800">
+                <strong class="text-cyan">Hinge Region Interaction:</strong>
+                <p class="mt-1">Nitrogen-1 of the quinazoline scaffold typically forms a critical hydrogen bond with the backbone amide nitrogen of Met793 in the kinase hinge segment.</p>
+              </div>
+              <div class="p-3 bg-slate-950 rounded border border-slate-800">
+                <strong class="text-cyan">Gatekeeper Residue (Thr790):</strong>
+                <p class="mt-1">Thr790 controls access to the deep hydrophobic pocket. Mutation to bulky Methionine (T790M) creates steric hindrance blocking 1st-generation TKIs while enhancing ATP affinity.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 10: METHODOLOGY
+             ========================================== -->
+        <section class="app-section" id="methodology">
+          <div class="section-header">
+            <div>
+              <h2>Computational QSAR &amp; Chemoinformatics Methodology</h2>
+              <p class="section-subtitle">Mathematical derivations, feature calculations, and validation standards</p>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">1. Biological Activity Transformation: IC₅₀ to pIC₅₀</div>
+              </div>
+              <p class="text-secondary text-sm leading-relaxed mb-3">
+                Raw biochemical inhibition potency is reported as an IC₅₀ (the molar concentration required for 50% enzyme inhibition). Because IC₅₀ spans multiple orders of magnitude (from picomolar to micromolar), statistical regression algorithms struggle with severe non-normality and heteroscedasticity.
+              </p>
+              <div class="p-3 bg-slate-950 rounded border border-slate-800 font-mono text-cyan text-sm mb-3">
+                pIC₅₀ = -log₁₀(IC₅₀ in Molar) = -log₁₀(IC₅₀ in nM × 10⁻⁹)
+              </div>
+              <p class="text-xs text-muted">
+                <strong>Example:</strong> A potent inhibitor with IC₅₀ = 10 nM corresponds to 1.0 × 10⁻⁸ M → pIC₅₀ = -log₁₀(10⁻⁸) = 8.00.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">2. Model Validation Metrics Formulas</div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                <div class="p-3 bg-slate-950 rounded border border-slate-800">
+                  <strong class="text-cyan">Coefficient of Determination (R²):</strong>
+                  <div class="font-mono text-slate-300 mt-2">R² = 1 - [Σ(yᵢ - ŷᵢ)² / Σ(yᵢ - ȳ)²]</div>
+                  <p class="text-muted mt-1">Quantifies the proportion of experimental variance captured by the model.</p>
+                </div>
+
+                <div class="p-3 bg-slate-950 rounded border border-slate-800">
+                  <strong class="text-amber">Root Mean Squared Error (RMSE):</strong>
+                  <div class="font-mono text-slate-300 mt-2">RMSE = √[ (1/n) Σ(yᵢ - ŷᵢ)² ]</div>
+                  <p class="text-muted mt-1">Measures the standard deviation of residuals; heavily penalizes large outlier errors.</p>
+                </div>
+
+                <div class="p-3 bg-slate-950 rounded border border-slate-800">
+                  <strong class="text-teal">Mean Absolute Error (MAE):</strong>
+                  <div class="font-mono text-slate-300 mt-2">MAE = (1/n) Σ|yᵢ - ŷᵢ|</div>
+                  <p class="text-muted mt-1">Average linear error magnitude across all test instances.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">3. Applicability Domain (AD) Evaluation</div>
+              </div>
+              <p class="text-secondary text-sm leading-relaxed">
+                The applicability domain is the chemical response and structural space within which a QSAR model makes reliable predictions. In this platform, query compounds are mapped into standardized descriptor space, and their Euclidean distance to the training centroid is evaluated against a 99% boundary threshold (Mean + 2.5 SD). If a query molecule lies outside this boundary, an extrapolation warning is displayed.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 11: VIVA VOCE / FAQ
+             ========================================== -->
+        <section class="app-section" id="viva-defense">
+          <div class="section-header">
+            <div>
+              <h2>Academic Viva Voce Defense &amp; Examination Guide</h2>
+              <p class="section-subtitle">25 rigorous questions and answers prepared for B.Tech Biotechnology / Bioinformatics degree project defense</p>
+            </div>
+          </div>
+
+          <div class="card mb-4">
+            <input type="text" id="viva-search-input" class="form-control" placeholder="Search viva questions by keyword (e.g., overfitting, pIC50, EGFR, R2, leakage)..." />
+          </div>
+
+          <div class="viva-list">
+            
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>1. What is QSAR, and what is its fundamental scientific premise?</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                <strong>QSAR (Quantitative Structure-Activity Relationship)</strong> is a computational modeling technique based on the principle that the biological activity of a chemical compound is an intrinsic mathematical function of its molecular structure and physicochemical properties. By quantifying molecular features into descriptors, statistical or machine learning models can predict the bioactivity of novel, untested chemical entities.
+              </div>
+            </div>
+
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>2. Why convert experimental IC₅₀ values into pIC₅₀ for machine learning?</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                Raw IC₅₀ values span several orders of magnitude (e.g. 0.1 nM to 10,000 nM) and exhibit heavy positive skewness. Converting to the negative logarithmic scale: <code>pIC₅₀ = -log₁₀(Molar IC₅₀)</code> linearizes the potency data, stabilizes residual variance (homoscedasticity), and aligns with standard thermodynamic free energy changes of binding ($\Delta G = -RT \ln K_d$).
+              </div>
+            </div>
+
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>3. What is EGFR and why is it a primary oncogenic drug target?</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                Epidermal Growth Factor Receptor (EGFR/ErbB1) is a transmembrane receptor tyrosine kinase. In malignancies such as non-small cell lung cancer (NSCLC) and glioblastoma, EGFR undergoes activating mutations (e.g., exon 19 deletion, L858R) or amplification, driving constitutive, ligand-independent downstream signaling through the MAPK and PI3K/Akt pathways, leading to uncontrolled proliferation and metastasis.
+              </div>
+            </div>
+
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>4. What is a molecular descriptor? Give examples of 1D, 2D, and 3D descriptors.</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                A molecular descriptor is the numerical representation of a chemical feature.
+                <ul class="list-disc pl-5 mt-1 space-y-1">
+                  <li><strong>1D Descriptors:</strong> Molecular formula, atomic counts, molecular weight.</li>
+                  <li><strong>2D Descriptors:</strong> Topological polar surface area (TPSA), rotatable bonds, LogP, ring counts, connection matrices.</li>
+                  <li><strong>3D Descriptors:</strong> Solvent-accessible surface area, dipole moment, pharmacophore distance matrices, conformational energies.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>5. What is data leakage, and how is it prevented in this application?</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                Data leakage occurs when information from outside the training dataset (such as the testing set) is used to fit the model, resulting in overly optimistic performance estimates. In this platform, data leakage is strictly prevented by computing the mean and variance for feature standardization (Z-score scaling) <strong>exclusively on the training partition</strong>, and subsequently applying those fixed training parameters to the test set.
+              </div>
+            </div>
+
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>6. What is overfitting, and how do we detect and mitigate it?</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                Overfitting occurs when a model memorizes random noise in the training set instead of learning the underlying structure-activity relationship. It is detected when the training $R^2$ is very high (e.g. >0.95) but the test $R^2$ is low or negative. We mitigate it via L2 regularization (Ridge), limiting tree depth in Random Forests, and employing K-fold cross-validation.
+              </div>
+            </div>
+
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>7. What is the difference between R² and RMSE?</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                <strong>R² (Coefficient of Determination)</strong> is a scale-free relative metric that indicates the proportion of target variance explained by the model (ranging from 1 down to negative values). <strong>RMSE (Root Mean Squared Error)</strong> is an absolute error metric expressed in the exact units of the target variable (pIC₅₀ units), indicating the typical distance of predictions from experimental truths.
+              </div>
+            </div>
+
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>8. What is the Applicability Domain (AD) of a QSAR model?</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                The Applicability Domain defines the chemical, structural, and property boundaries within which the QSAR model can make reliable predictions. If a candidate molecule has properties vastly dissimilar from the training library (an extrapolation outlier), the model's predictions carry high uncertainty and must be flagged.
+              </div>
+            </div>
+
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>9. What is Lipinski's Rule of 5?</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                Lipinski's Rule of 5 evaluates the drug-likeness of a chemical entity for oral bioavailability:
+                <ul class="list-disc pl-5 mt-1">
+                  <li>Molecular weight ≤ 500 Da</li>
+                  <li>LogP ≤ 5.0</li>
+                  <li>Hydrogen bond donors (HBD) ≤ 5</li>
+                  <li>Hydrogen bond acceptors (HBA) ≤ 10</li>
+                </ul>
+                Molecules with more than 1 violation are at higher risk of poor oral absorption.
+              </div>
+            </div>
+
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>10. What is the clinical significance of the EGFR T790M mutation?</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                The T790M mutation occurs at residue 790 in the kinase ATP binding pocket, replacing a Threonine with a bulky Methionine. This creates steric clash with 1st-generation reversible TKIs (Gefitinib, Erlotinib) and increases the kinase's affinity for ATP, driving drug resistance in over 50% of treated NSCLC patients. 3rd-generation inhibitors like Osimertinib were developed specifically to conquer T790M.
+              </div>
+            </div>
+
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>11. Why can an R² metric become negative?</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                $R^2 = 1 - \frac{SS_{\text{res}}}{SS_{\text{tot}}}$. If the residual sum of squares ($SS_{\text{res}}$) is greater than the total sum of squares ($SS_{\text{tot}}$), $R^2$ becomes negative. This indicates that the trained model performs worse than simply predicting the mean of the training data for all samples.
+              </div>
+            </div>
+
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>12. How does Random Forest calculate Feature Importance in this platform?</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                In our Random Forest regressor, whenever a node splits on a feature, the reduction in mean squared error (variance gain multiplied by sample count) is accumulated for that specific feature. Across all trees in the ensemble, the total variance reduction achieved by each descriptor is normalized to compute its relative importance score.
+              </div>
+            </div>
+
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>13. What is K-Fold Cross-Validation?</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                K-Fold Cross-Validation divides the dataset into $K$ equal-sized subsets. The model is trained on $K-1$ folds and tested on the remaining fold, repeating this process $K$ times so that every sample is used for validation exactly once. The mean and standard deviation of the $K$ scores provide an internal estimate of model generalization.
+              </div>
+            </div>
+
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>14. Why is computational prediction not proof of cancer treatment efficacy?</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                A QSAR model estimates target enzyme inhibition in an isolated in silico context. It does not account for complex physiological factors such as in vivo clearance, metabolic breakdown by cytochrome P450 enzymes, plasma protein binding, cellular membrane permeability, off-target toxicity, or tumor microenvironment resistance mechanisms.
+              </div>
+            </div>
+
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>15. What are the key limitations of QSAR modeling?</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                Key limitations include: dependency on the quality and size of training bioassays, lack of 3D induced-fit conformational receptor dynamics, activity cliffs (where minor structural changes cause massive activity changes), and restricted applicability domains.
+              </div>
+            </div>
+
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>16. How does Principal Component Analysis (PCA) work in this application?</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                PCA is an unsupervised dimensionality reduction method. It computes the covariance matrix of the standardized descriptor matrix and extracts the orthogonal eigenvectors corresponding to the largest eigenvalues. Projecting the 9-dimensional descriptor space onto PC1 and PC2 enables 2D visualization of the chemical library's diversity and clustering.
+              </div>
+            </div>
+
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>17. What is TPSA and why is it important in drug discovery?</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                <strong>TPSA (Topological Polar Surface Area)</strong> is the sum of surface contributions of polar atoms (nitrogen, oxygen, and attached hydrogens). It strongly correlates with passive molecular transport across biological membranes. Compounds with TPSA ≤ 140 Å² generally show good intestinal absorption, while TPSA &lt; 90 Å² is typically needed for blood-brain barrier penetration.
+              </div>
+            </div>
+
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>18. What is Fraction Csp3, and why does higher Fsp3 often improve drug candidates?</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                Fraction Csp3 is the ratio of sp3-hybridized carbons to the total number of carbon atoms. A higher Fsp3 reflects greater 3D spatial complexity and molecular saturation (moving away from flat, planar aromatic rings), which frequently correlates with higher aqueous solubility and lower clinical attrition rates.
+              </div>
+            </div>
+
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>19. How does Ridge Regression prevent singular matrix errors?</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                Ordinary Least Squares solves $(X^T X)\beta = X^T y$. If collinear features exist, $X^T X$ is ill-conditioned or non-invertible. Ridge adds an L2 penalty $\lambda I$ to the diagonal: $(X^T X + \lambda I)\beta = X^T y$, guaranteeing that the matrix is strictly positive definite and invertible.
+              </div>
+            </div>
+
+            <div class="viva-card">
+              <div class="viva-header">
+                <span>20. How would this project be extended in a research setting?</span>
+                <span class="viva-chevron">▼</span>
+              </div>
+              <div class="viva-content">
+                Future scope includes integrating molecular docking (AutoDock Vina) for binding free energy estimation, molecular dynamics simulations (GROMACS) to capture induced-fit flexibility, graph neural networks (GNNs) on molecular topology, in silico ADMET toxicity screening, and experimental verification via kinase inhibition assays.
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 12: ABOUT & DATA SOURCES
+             ========================================== -->
+        <section class="app-section" id="about-report">
+          <div class="section-header">
+            <div>
+              <h2>Academic Project Documentation &amp; Data Sources</h2>
+              <p class="section-subtitle">Full project abstract, objectives, literature references, and ChEMBL data provenance</p>
+            </div>
+          </div>
+
+          <div class="space-y-4 text-secondary leading-relaxed">
+            
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Abstract</div>
+              </div>
+              <p class="text-sm">
+                Targeted cancer therapies require the systematic discovery and optimization of small molecules that selectively inhibit oncogenic protein kinases. In this work, an interactive, client-side bioinformatics and machine learning platform was developed to model the Quantitative Structure-Activity Relationship (QSAR) of Epidermal Growth Factor Receptor (EGFR) inhibitors. An authentic benchmark dataset of 120 curated small molecules with verified biochemical IC₅₀ assays from the ChEMBL database was compiled. Nine 1D/2D physicochemical molecular descriptors—including molecular weight, partition coefficient (LogP), topological polar surface area (TPSA), and hydrogen-bonding capacities—were calculated. Multiple regression and ensemble machine learning models were developed, incorporating data leakage safeguards, cross-validation, and applicability domain checks. The platform enables real-time single-molecule activity estimation and high-throughput virtual candidate prioritization.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Verified Data Sources &amp; Provenance</div>
+              </div>
+              <div class="table-responsive">
+                <table class="table-custom">
+                  <thead>
+                    <tr>
+                      <th>Resource</th>
+                      <th>Identifier / Link</th>
+                      <th>Access Date</th>
+                      <th>Data Extracted</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>ChEMBL Database</strong></td>
+                      <td><a href="https://www.ebi.ac.uk/chembl/target_report_card/CHEMBL203/" target="_blank" rel="noopener noreferrer" class="text-cyan">CHEMBL203 (EGFR / ErbB1)</a></td>
+                      <td>Current Session</td>
+                      <td>Binding IC₅₀ bioassay records, SMILES structures, clinical status</td>
+                    </tr>
+                    <tr>
+                      <td><strong>UniProtKB</strong></td>
+                      <td><a href="https://www.uniprot.org/uniprotkb/P00533/entry" target="_blank" rel="noopener noreferrer" class="text-cyan">P00533 (EGFR_HUMAN)</a></td>
+                      <td>Current Session</td>
+                      <td>Domain coordinates (kinase 695–1022), phosphorylation sites</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Protein Data Bank (PDB)</strong></td>
+                      <td>1M17, 2J6M, 4I22</td>
+                      <td>Current Session</td>
+                      <td>X-ray crystal structures of EGFR kinase in complex with Erlotinib &amp; Osimertinib</td>
+                    </tr>
+                    <tr>
+                      <td><strong>PubChem</strong></td>
+                      <td>Compound IDs (Gefitinib: 123631, Erlotinib: 176870)</td>
+                      <td>Current Session</td>
+                      <td>IUPAC chemical validation and 2D topology</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">Future Scope</div>
+              </div>
+              <ul class="text-xs text-secondary space-y-1.5 pl-4 list-disc">
+                <li><strong>Molecular Docking Integration:</strong> Embedding WebAssembly-based scoring functions to evaluate binding pose energetics.</li>
+                <li><strong>Multi-Target Kinome Selectivity:</strong> Modeling cross-reactivity against related ErbB family members (HER2, HER3, HER4) to minimize clinical cardiotoxicity.</li>
+                <li><strong>ADMET Profiling:</strong> Incorporating predictive models for CYP450 metabolism, hERG cardiotoxicity, and blood-brain barrier permeability.</li>
+                <li><strong>Experimental Assay Verification:</strong> Validating top computationally prioritized candidates via wet-lab TR-FRET kinase assays and MTS viability assays in NSCLC cell lines (PC9, H1975).</li>
+              </ul>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Compound Inspection Modal Dialog -->
+  <div class="modal-overlay" id="compound-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modal-title">Compound Details &amp; Molecular Profiling</h3>
+        <button class="modal-close" id="modal-close-btn" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="modal-body" id="compound-modal-details">
+        <!-- Injected dynamically by UI.showCompoundModal -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <!-- Fallback-resilient CDN Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Modular Application Scripts -->
+  <script src="js/validation.js"></script>
+  <script src="js/descriptors.js"></script>
+  <script src="js/qsar.js"></script>
+  <script src="js/ml.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
