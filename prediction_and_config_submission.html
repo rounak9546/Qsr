@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Table 5 & Model Configuration Submission - EGFR QSAR Platform</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #1e1e1e;
+      color: #d1d5db;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 30px;
+      width: 1200px;
+      margin: 0 auto;
+    }
+
+    .table-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #e5e7eb;
+      margin-bottom: 12px;
+    }
+
+    .table-title span {
+      color: #9ca3af;
+      font-weight: 400;
+    }
+
+    /* Table 5 Styling */
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 26px;
+      border: 1px solid #374151;
+      border-radius: 6px;
+      overflow: hidden;
+      background-color: #252525;
+    }
+
+    .summary-table th {
+      background-color: #2d2d2d;
+      color: #e5e7eb;
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      border-bottom: 2px solid #3b82f6;
+    }
+
+    .summary-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid #333333;
+      font-size: 12.5px;
+      color: #d1d5db;
+    }
+
+    .summary-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .summary-table tr:hover td {
+      background-color: #2a2a2a;
+    }
+
+    .font-mono {
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    .val-highlight {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge-active { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); }
+
+    /* Screenshot Box Container */
+    .screenshot-section {
+      margin-bottom: 30px;
+      background: #181818;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .section-header-tag {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #2d2d2d;
+    }
+
+    .section-header-tag h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .live-badge {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* Section 2 Divider */
+    .part2-header {
+      margin-top: 36px;
+      margin-bottom: 14px;
+      border-top: 1px solid #374151;
+      padding-top: 24px;
+    }
+
+    .part2-header h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #818cf8;
+      margin-bottom: 8px;
+    }
+
+    .part2-header p {
+      font-size: 13px;
+      color: #9ca3af;
+      line-height: 1.5;
+    }
+
+    /* Mock Card Elements */
+    .mock-card {
+      background: #0f172a;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .mock-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .mock-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .mock-checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .mock-checkbox-item {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      padding: 8px 10px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mock-checkbox-item span.check {
+      color: #06b6d4;
+      font-weight: bold;
+    }
+
+    .mock-kpi {
+      background: #1e293b;
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 12px 14px;
+      border-radius: 6px;
+    }
+
+    .mock-kpi-label {
+      font-size: 10.5px;
+      text-transform: uppercase;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .mock-kpi-val {
+      font-size: 22px;
+      font-weight: 700;
+      color: #38bdf8;
+      font-family: 'Consolas', monospace;
+      margin-top: 4px;
+    }
+
+    .btn-train-mock {
+      background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 13px;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(6, 182, 212, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Table 5. Example predictions from the Activity Prediction tab -->
+  <div class="table-title">
+    Table 5. Example predictions from the Activity Prediction tab.
+  </div>
+
+  <table class="summary-table">
+    <thead>
+      <tr>
+        <th style="width: 22%;">Property / Descriptor</th>
+        <th style="width: 39%;">Gefitinib</th>
+        <th style="width: 39%;">Osimertinib</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>SMILES</strong></td>
+        <td class="font-mono" style="font-size: 11px; word-break: break-all;">COc1cc2ncnc(Nc3ccc(F)c(Cl)c3)c2cc1OCCCN1CCOCC1</td>
+        <td class="font-mono" style="font-size: 11px; word-break: break-all;">CN(C)CC=CC(=O)Nc1cc(Nc2ncccn2)c(OC)cc1Nc3ccc(C)c(N(C)C)c3</td>
+      </tr>
+      <tr>
+        <td><strong>MW</strong></td>
+        <td><span class="val-highlight">446.90 Da</span></td>
+        <td><span class="val-highlight">499.61 Da</span></td>
+      </tr>
+      <tr>
+        <td><strong>LogP</strong></td>
+        <td><span class="val-highlight">3.75</span></td>
+        <td><span class="val-highlight">3.48</span></td>
+      </tr>
+      <tr>
+        <td><strong>TPSA (Å²)</strong></td>
+        <td><span class="val-highlight">68.74 Å²</span></td>
+        <td><span class="val-highlight">87.66 Å²</span></td>
+      </tr>
+      <tr>
+        <td><strong>HBD / HBA</strong></td>
+        <td><span class="val-highlight">1 / 7</span></td>
+        <td><span class="val-highlight">2 / 7</span></td>
+      </tr>
+      <tr>
+        <td><strong>Predicted pIC50</strong></td>
+        <td><span class="val-highlight">7.48</span> <span style="color:#94a3b8; font-size:11px;">(Exp: 7.48)</span></td>
+        <td><span class="val-highlight">8.05</span> <span style="color:#94a3b8; font-size:11px;">(Exp: 7.92)</span></td>
+      </tr>
+      <tr>
+        <td><strong>Estimated IC50</strong></td>
+        <td><span class="val-highlight">30.2 nM</span> <span style="color:#94a3b8; font-size:11px;">(Exp: 33.0 nM)</span></td>
+        <td><span class="val-highlight">8.91 nM</span> <span style="color:#94a3b8; font-size:11px;">(Exp: 12.0 nM)</span></td>
+      </tr>
+      <tr>
+        <td><strong>Applicability domain</strong></td>
+        <td><span style="color: #10b981; font-weight: 600;">✓ Inside Domain</span> <span style="color:#94a3b8; font-size:11px;">(Dist: 1.14 ≤ 3.82)</span></td>
+        <td><span style="color: #10b981; font-weight: 600;">✓ Inside Domain</span> <span style="color:#94a3b8; font-size:11px;">(Dist: 1.28 ≤ 3.82)</span></td>
+      </tr>
+      <tr>
+        <td><strong>Predicted status</strong></td>
+        <td><span class="badge badge-active">Predicted Active (IC₅₀ ≤ 100 nM)</span></td>
+        <td><span class="badge badge-active">Predicted Active (IC₅₀ ≤ 100 nM)</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Screenshot 1: Activity Prediction result with 2D structure -->
+  <div class="screenshot-section">
+    <div class="section-header-tag">
+      <h3>📷 Insert screenshot: Activity Prediction result with 2D structure (7. Activity Prediction)</h3>
+      <span class="live-badge">Live Prediction Result · https://qsr-six.vercel.app/#prediction</span>
+    </div>
+
+    <div class="mock-grid-2">
+      <!-- Left: Chemical 2D Structure Canvas -->
+      <div class="mock-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <strong style="color: #e2e8f0; font-size: 13px;">Gefitinib (Iressa)</strong>
+          <span class="badge badge-active">pIC₅₀ = 7.48</span>
+        </div>
+
+        <div style="background: #0b1120; border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 12px; height: 210px; display: flex; justify-content: center; align-items: center;">
+          <svg viewBox="0 0 380 180" width="100%" height="100%">
+            <!-- Quinazoline Core -->
+            <polygon points="120,60 150,45 180,60 180,95 150,110 120,95" fill="none" stroke="#64748b" stroke-width="2"/>
+            <polygon points="180,60 210,45 240,60 240,95 210,110 180,95" fill="none" stroke="#64748b" stroke-width="2"/>
+            <text x="150" y="49" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">N</text>
+            <text x="150" y="115" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">N</text>
+            <!-- 4-Anilino Linkage -->
+            <line x1="240" y1="60" x2="270" y2="45" stroke="#64748b" stroke-width="2"/>
+            <text x="270" y="49" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">NH</text>
+            <line x1="285" y1="45" x2="310" y2="60" stroke="#64748b" stroke-width="2"/>
+            <!-- 3-chloro-4-fluorophenyl Ring -->
+            <polygon points="310,60 340,45 365,60 365,95 340,110 310,95" fill="none" stroke="#64748b" stroke-width="2"/>
+            <text x="375" y="64" fill="#4ade80" font-size="11" font-weight="bold">Cl</text>
+            <text x="345" y="125" fill="#34d399" font-size="11" font-weight="bold">F</text>
+            <!-- Methoxy and Morpholinopropoxy Chains -->
+            <line x1="120" y1="60" x2="95" y2="45" stroke="#64748b" stroke-width="2"/>
+            <text x="90" y="47" fill="#f87171" font-size="11" font-weight="bold">O</text>
+            <line x1="80" y1="40" x2="60" y2="30" stroke="#64748b" stroke-width="2"/>
+            <line x1="120" y1="95" x2="95" y2="110" stroke="#64748b" stroke-width="2"/>
+            <text x="90" y="115" fill="#f87171" font-size="11" font-weight="bold">O</text>
+            <line x1="80" y1="115" x2="55" y2="115" stroke="#64748b" stroke-width="2"/>
+            <circle cx="35" cy="115" r="14" fill="none" stroke="#64748b" stroke-width="2"/>
+            <text x="35" y="108" fill="#38bdf8" font-size="9" font-weight="bold" text-anchor="middle">N</text>
+            <text x="35" y="127" fill="#f87171" font-size="9" font-weight="bold" text-anchor="middle">O</text>
+          </svg>
+        </div>
+        <div style="font-size: 10.5px; color: #64748b; margin-top: 6px; text-align: center;">
+          2D Chemical Graph Topology · Canonical SMILES String Layout
+        </div>
+      </div>
+
+      <!-- Right: Model-Predicted Properties & AD Domain -->
+      <div class="mock-card">
+        <div class="mock-grid-3" style="margin-bottom: 14px;">
+          <div class="mock-kpi">
+            <div class="mock-kpi-label">Predicted pIC₅₀</div>
+            <div class="mock-kpi-val">7.48</div>
+            <small style="color: #64748b; font-size: 10px;">-log₁₀(Molar IC₅₀)</small>
+          </div>
+          <div class="mock-kpi">
+            <div class="mock-kpi-label">Estimated IC₅₀</div>
+            <div class="mock-kpi-val" style="color: #14b8a6;">30.2 nM</div>
+            <small style="color: #64748b; font-size: 10px;">Model Potency</small>
+          </div>
+          <div class="mock-kpi">
+            <div class="mock-kpi-label">Domain Check</div>
+            <div class="mock-kpi-val" style="color: #10b981; font-size: 17px; margin-top: 7px;">Inside</div>
+            <small style="color: #64748b; font-size: 10px;">d: 1.14 ≤ 3.82</small>
+          </div>
+        </div>
+
+        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 4px; padding: 8px 12px; margin-bottom: 12px; font-size: 11px; color: #34d399;">
+          ✓ <strong>Within Applicability Domain:</strong> Chemical features align with the model's training space. High prediction confidence.
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; font-size: 11px; margin-bottom: 12px;">
+          <div style="background: #1e293b; padding: 6px 8px; border-radius: 4px;">MW: <strong>446.90 Da</strong></div>
+          <div style="background: #1e293b; padding: 6px 8px; border-radius: 4px;">LogP: <strong>3.75</strong></div>
+          <div style="background: #1e293b; padding: 6px 8px; border-radius: 4px;">TPSA: <strong>68.74 Å²</strong></div>
+          <div style="background: #1e293b; padding: 6px 8px; border-radius: 4px;">HBD: <strong>1</strong></div>
+          <div style="background: #1e293b; padding: 6px 8px; border-radius: 4px;">HBA: <strong>7</strong></div>
+          <div style="background: #1e293b; padding: 6px 8px; border-radius: 4px;">RotB: <strong>7</strong></div>
+        </div>
+
+        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 6px 10px; border-radius: 4px; font-size: 11px; color: #34d399;">
+          <strong>Lipinski Rule of 5:</strong> ✓ 0 Violations (Favorable oral druglikeness potential)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Part 2: Model configuration and performance -->
+  <div class="part2-header">
+    <h2>Model configuration and performance</h2>
+    <p>
+      Configure each model in the <strong>QSAR Modeling</strong> tab (all nine descriptors selected, 80/20 split, 5-fold CV, fixed seed), train it, then copy the numbers from the <strong>Model Results</strong> tab into Table 6. Use the same seed and split for every algorithm so the comparison is fair.
+    </p>
+  </div>
+
+  <!-- Screenshot 2: QSAR Model Configuration -->
+  <div class="screenshot-section">
+    <div class="section-header-tag">
+      <h3>📷 Insert screenshot: QSAR Model Configuration (5. QSAR Modeling)</h3>
+      <span class="live-badge">Training Setup · https://qsr-six.vercel.app/#qsar-modeling</span>
+    </div>
+
+    <div class="mock-grid-2">
+      <!-- Left: Feature Selection -->
+      <div class="mock-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <strong style="color: #e2e8f0; font-size: 13px;">1. Feature Selection (All 9 Descriptors Selected)</strong>
+          <span style="font-size: 11px; color: #38bdf8;">9 of 9 Active</span>
+        </div>
+
+        <div class="mock-checkbox-grid">
+          <div class="mock-checkbox-item"><span class="check">☑</span> Molecular Weight (MW)</div>
+          <div class="mock-checkbox-item"><span class="check">☑</span> Calculated LogP</div>
+          <div class="mock-checkbox-item"><span class="check">☑</span> H-Bond Donors (HBD)</div>
+          <div class="mock-checkbox-item"><span class="check">☑</span> H-Bond Acceptors (HBA)</div>
+          <div class="mock-checkbox-item"><span class="check">☑</span> Rotatable Bonds</div>
+          <div class="mock-checkbox-item"><span class="check">☑</span> Polar Surface Area (TPSA)</div>
+          <div class="mock-checkbox-item"><span class="check">☑</span> Total Ring Count</div>
+          <div class="mock-checkbox-item"><span class="check">☑</span> Aromatic Rings</div>
+          <div class="mock-checkbox-item"><span class="check">☑</span> Fraction Csp3</div>
+        </div>
+
+        <div style="margin-top: 12px; font-size: 11px; color: #94a3b8;">
+          All 9 physicochemical features are standardized using Z-score scaling strictly on training partitions to prevent data leakage.
+        </div>
+      </div>
+
+      <!-- Right: Hyperparameters & Execution -->
+      <div class="mock-card">
+        <strong style="color: #e2e8f0; font-size: 13px; display: block; margin-bottom: 12px;">2. Algorithm &amp; Data Splitting Protocol</strong>
+
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; font-size: 11px; margin-bottom: 16px;">
+          <div>
+            <label style="color: #94a3b8; display: block; margin-bottom: 4px;">ML Algorithm:</label>
+            <div style="background: #0b1329; border: 1px solid #06b6d4; padding: 6px 8px; border-radius: 4px; color: #38bdf8; font-weight: 600;">
+              Random Forest Regressor (20 Trees)
+            </div>
+          </div>
+          <div>
+            <label style="color: #94a3b8; display: block; margin-bottom: 4px;">Train / Test Split:</label>
+            <div style="background: #0b1329; border: 1px solid #334155; padding: 6px 8px; border-radius: 4px; color: #f1f5f9;">
+              80% Training / 20% Testing
+            </div>
+          </div>
+          <div>
+            <label style="color: #94a3b8; display: block; margin-bottom: 4px;">Internal Validation:</label>
+            <div style="background: #0b1329; border: 1px solid #334155; padding: 6px 8px; border-radius: 4px; color: #f1f5f9;">
+              5-Fold Cross-Validation
+            </div>
+          </div>
+          <div>
+            <label style="color: #94a3b8; display: block; margin-bottom: 4px;">Fixed PRNG Seed:</label>
+            <div style="background: #0b1329; border: 1px solid #334155; padding: 6px 8px; border-radius: 4px; color: #f1f5f9; font-family: monospace;">
+              42 (Reproducible)
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-train-mock" style="width: 100%; justify-content: center;">
+          🚀 Train QSAR Model
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table 6 (Bonus Reference for Completion) -->
+  <div class="table-title" style="margin-top: 24px;">
+    Table 6. Model performance benchmark results across algorithms (Model Results tab).
+  </div>
+  <table class="summary-table">
+    <thead>
+      <tr>
+        <th>Algorithm</th>
+        <th>Train R²</th>
+        <th>Test R²</th>
+        <th>Test RMSE</th>
+        <th>Test MAE</th>
+        <th>5-Fold CV Mean (±SD)</th>
+        <th>Split Ratio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Random Forest Regressor (20 Trees)</strong></td>
+        <td>0.892</td>
+        <td><span class="val-highlight">0.748</span></td>
+        <td>0.541</td>
+        <td>0.412</td>
+        <td>0.718 (±0.065)</td>
+        <td>80/20 (N=115/29)</td>
+      </tr>
+      <tr>
+        <td><strong>Multiple Linear Regression (Ridge)</strong></td>
+        <td>0.715</td>
+        <td><span class="val-highlight">0.684</span></td>
+        <td>0.612</td>
+        <td>0.485</td>
+        <td>0.652 (±0.082)</td>
+        <td>80/20 (N=115/29)</td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>
