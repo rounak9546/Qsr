@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Curation Summary & Screenshots Submission</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #1e1e1e;
+      color: #d1d5db;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 30px;
+      width: 1200px;
+      margin: 0 auto;
+    }
+
+    .table-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #e5e7eb;
+      margin-bottom: 12px;
+    }
+
+    .table-title span {
+      color: #9ca3af;
+      font-weight: 400;
+    }
+
+    /* Table 3 Styling */
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 28px;
+      border: 1px solid #374151;
+      border-radius: 6px;
+      overflow: hidden;
+      background-color: #252525;
+    }
+
+    .summary-table th {
+      background-color: #2d2d2d;
+      color: #e5e7eb;
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      border-bottom: 2px solid #3b82f6;
+    }
+
+    .summary-table td {
+      padding: 11px 16px;
+      border-bottom: 1px solid #333333;
+      font-size: 13px;
+      color: #d1d5db;
+    }
+
+    .summary-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .summary-table tr:hover td {
+      background-color: #2a2a2a;
+    }
+
+    .count-val {
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      color: #38bdf8;
+      background: #0f2744;
+      padding: 3px 10px;
+      border-radius: 4px;
+      display: inline-block;
+      border: 1px solid #0284c7;
+    }
+
+    /* Screenshot Container Box */
+    .screenshot-section {
+      margin-bottom: 26px;
+      background: #181818;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .section-header-tag {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #2d2d2d;
+    }
+
+    .section-header-tag h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .live-badge {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* Inner UI Mockups */
+    .app-table-mock {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      background: #0f172a;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .app-table-mock th {
+      background: #1e293b;
+      color: #94a3b8;
+      padding: 8px 10px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .app-table-mock td {
+      padding: 7px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: #cbd5e1;
+    }
+
+    .font-mono {
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    .text-cyan { color: #06b6d4; font-weight: 600; }
+    .text-muted { color: #64748b; }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .badge-active { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); }
+    .badge-inter { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4); }
+    .badge-inact { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); }
+
+    .btn-mock {
+      background: rgba(6, 182, 212, 0.2);
+      color: #38bdf8;
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    /* Histograms Grid */
+    .histogram-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .hist-card {
+      background: #0f172a;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      padding: 12px;
+    }
+
+    .hist-title {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #f1f5f9;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Table 3. Data curation summary -->
+  <div class="table-title">
+    Table 3. Data curation summary <span>(Molecular Analysis tab)</span>
+  </div>
+
+  <table class="summary-table">
+    <thead>
+      <tr>
+        <th style="width: 70%;">Curation step</th>
+        <th style="width: 30%;">Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Raw records ingested</td>
+        <td><span class="count-val">144</span></td>
+      </tr>
+      <tr>
+        <td>Duplicates pruned</td>
+        <td><span class="count-val">0</span></td>
+      </tr>
+      <tr>
+        <td>Invalid or incomplete records</td>
+        <td><span class="count-val">0</span></td>
+      </tr>
+      <tr>
+        <td>Records passing curation</td>
+        <td><span class="count-val">144</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Screenshot 1: Dataset Explorer Table -->
+  <div class="screenshot-section">
+    <div class="section-header-tag">
+      <h3>📷 Screenshot: Dataset Explorer table (3. Dataset Explorer)</h3>
+      <span class="live-badge">144 of 144 compounds · ChEMBL203</span>
+    </div>
+
+    <!-- Table Header Controls Bar -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 11px;">
+      <div style="background: #0b1329; border: 1px solid #334155; padding: 4px 10px; border-radius: 4px; color: #94a3b8; width: 280px;">
+        🔍 Search by Compound ID, Name, or SMILES...
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <span style="color: #94a3b8;">Filter:</span>
+        <span style="background: #0b1329; border: 1px solid #334155; padding: 3px 8px; border-radius: 4px; color: #e2e8f0;">All Activity Tiers</span>
+        <span style="background: rgba(6, 182, 212, 0.15); color: #06b6d4; border: 1px solid rgba(6, 182, 212, 0.3); padding: 3px 8px; border-radius: 4px; font-weight: 600;">144 compounds</span>
+      </div>
+    </div>
+
+    <table class="app-table-mock">
+      <thead>
+        <tr>
+          <th>ID ↕</th>
+          <th>Compound ↕</th>
+          <th>SMILES Structure</th>
+          <th>pIC₅₀ ↕</th>
+          <th>IC₅₀ (nM) ↕</th>
+          <th>Bioactivity Tier</th>
+          <th>MW (Da) ↕</th>
+          <th>LogP ↕</th>
+          <th>TPSA (Å²) ↕</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="text-cyan">CHEMBL939</span></td>
+          <td>Gefitinib (Iressa)</td>
+          <td class="font-mono text-muted" style="max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">COc1cc2ncnc(Nc3ccc(F)c(Cl)c3)c2cc1OCCCN1CCOCC1</td>
+          <td><strong style="color: #f1f5f9;">7.48</strong></td>
+          <td>33.0 nM</td>
+          <td><span class="badge badge-active">Active</span></td>
+          <td>446.90</td>
+          <td>3.75</td>
+          <td>68.74</td>
+          <td><span class="btn-mock">Inspect</span></td>
+        </tr>
+        <tr>
+          <td><span class="text-cyan">CHEMBL547</span></td>
+          <td>Erlotinib (Tarceva)</td>
+          <td class="font-mono text-muted" style="max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">COCCOC1=C(C=C2C(=C1)C(=NC=N2)NC3=CC=CC(=C3)C#C)OCCOC</td>
+          <td><strong style="color: #f1f5f9;">8.70</strong></td>
+          <td>2.0 nM</td>
+          <td><span class="badge badge-active">Active</span></td>
+          <td>393.44</td>
+          <td>2.98</td>
+          <td>74.74</td>
+          <td><span class="btn-mock">Inspect</span></td>
+        </tr>
+        <tr>
+          <td><span class="text-cyan">CHEMBL483327</span></td>
+          <td>Osimertinib (Tagrisso)</td>
+          <td class="font-mono text-muted" style="max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">CN(C)CC=CC(=O)Nc1cc(Nc2ncccn2)c(OC)cc1Nc3ccc(C)c(N(C)C)c3</td>
+          <td><strong style="color: #f1f5f9;">7.92</strong></td>
+          <td>12.0 nM</td>
+          <td><span class="badge badge-active">Active</span></td>
+          <td>499.61</td>
+          <td>3.48</td>
+          <td>87.66</td>
+          <td><span class="btn-mock">Inspect</span></td>
+        </tr>
+        <tr>
+          <td><span class="text-cyan">CHEMBL554</span></td>
+          <td>Lapatinib (Tykerb)</td>
+          <td class="font-mono text-muted" style="max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">CS(=O)(=O)CCNCc1ccc(-o1)c2ccc3ncnc(Nc4ccc(OCc5cccc(F)c5)c(Cl)c4)c3c2</td>
+          <td><strong style="color: #f1f5f9;">7.97</strong></td>
+          <td>10.8 nM</td>
+          <td><span class="badge badge-active">Active</span></td>
+          <td>581.06</td>
+          <td>5.12</td>
+          <td>111.45</td>
+          <td><span class="btn-mock">Inspect</span></td>
+        </tr>
+        <tr>
+          <td><span class="text-cyan">CHEMBL1173746</span></td>
+          <td>Afatinib (Gilotrif)</td>
+          <td class="font-mono text-muted" style="max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">CN(C)C/C=C/C(=O)Nc1cc2c(Nc3ccc(Cl)c(F)c3)ncnc2cc1OC4CCOC4</td>
+          <td><strong style="color: #f1f5f9;">9.30</strong></td>
+          <td>0.5 nM</td>
+          <td><span class="badge badge-active">Active</span></td>
+          <td>485.94</td>
+          <td>3.22</td>
+          <td>87.20</td>
+          <td><span class="btn-mock">Inspect</span></td>
+        </tr>
+        <tr>
+          <td><span class="text-cyan">CHEMBL24828</span></td>
+          <td>Vandetanib (Caprelsa)</td>
+          <td class="font-mono text-muted" style="max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">COc1cc2c(Nc3ccc(Br)c(F)c3)ncnc2cc1OCC1CCN(C)CC1</td>
+          <td><strong style="color: #f1f5f9;">6.30</strong></td>
+          <td>500.0 nM</td>
+          <td><span class="badge badge-inter">Intermediate</span></td>
+          <td>475.35</td>
+          <td>3.61</td>
+          <td>59.95</td>
+          <td><span class="btn-mock">Inspect</span></td>
+        </tr>
+        <tr>
+          <td><span class="text-cyan">CHEMBL453509</span></td>
+          <td>Compound-E98</td>
+          <td class="font-mono text-muted" style="max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">c1cc(Nc2ncnc3ccccc23)ccc1Cl</td>
+          <td><strong style="color: #f1f5f9;">5.47</strong></td>
+          <td>3400.0 nM</td>
+          <td><span class="badge badge-inact">Inactive</span></td>
+          <td>255.71</td>
+          <td>3.42</td>
+          <td>40.13</td>
+          <td><span class="btn-mock">Inspect</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; color: #64748b;">
+      <span>Showing Page 1 of 15 (144 total compounds)</span>
+      <span>Live URL: https://qsr-six.vercel.app/#dataset-explorer</span>
+    </div>
+  </div>
+
+  <!-- Screenshot 2: Histograms (pIC50, MW, LogP, TPSA) -->
+  <div class="screenshot-section">
+    <div class="section-header-tag">
+      <h3>📷 Screenshot: pIC50, MW, LogP and TPSA distribution histograms (4. Molecular Analysis)</h3>
+      <span class="live-badge">Statistical Chemoinformatics Profiling</span>
+    </div>
+
+    <div class="histogram-grid">
+      <!-- 1. Bioactivity pIC50 -->
+      <div class="hist-card">
+        <div class="hist-title">Biological Activity (pIC₅₀) Distribution</div>
+        <svg viewBox="0 0 450 170" width="100%" height="150">
+          <line x1="45" y1="135" x2="430" y2="135" stroke="#334155" stroke-width="1"/>
+          <line x1="45" y1="20" x2="45" y2="135" stroke="#334155" stroke-width="1"/>
+          <text x="35" y="25" fill="#94a3b8" font-size="9" text-anchor="end">40</text>
+          <text x="35" y="80" fill="#94a3b8" font-size="9" text-anchor="end">20</text>
+          <text x="35" y="135" fill="#94a3b8" font-size="9" text-anchor="end">0</text>
+          <!-- Bars -->
+          <rect x="55" y="115" width="38" height="20" rx="3" fill="#38bdf8" fill-opacity="0.8"/>
+          <rect x="100" y="98" width="38" height="37" rx="3" fill="#38bdf8" fill-opacity="0.8"/>
+          <rect x="145" y="82" width="38" height="53" rx="3" fill="#38bdf8" fill-opacity="0.8"/>
+          <rect x="190" y="52" width="38" height="83" rx="3" fill="#38bdf8" fill-opacity="0.8"/>
+          <rect x="235" y="28" width="38" height="107" rx="3" fill="#38bdf8" fill-opacity="0.8"/>
+          <rect x="280" y="38" width="38" height="97" rx="3" fill="#38bdf8" fill-opacity="0.8"/>
+          <rect x="325" y="65" width="38" height="70" rx="3" fill="#38bdf8" fill-opacity="0.8"/>
+          <rect x="370" y="105" width="38" height="30" rx="3" fill="#38bdf8" fill-opacity="0.8"/>
+          <!-- Labels -->
+          <text x="74" y="148" fill="#64748b" font-size="8" text-anchor="middle">5.0-5.6</text>
+          <text x="164" y="148" fill="#64748b" font-size="8" text-anchor="middle">6.2-6.8</text>
+          <text x="254" y="148" fill="#64748b" font-size="8" text-anchor="middle">7.4-8.0</text>
+          <text x="344" y="148" fill="#64748b" font-size="8" text-anchor="middle">8.6-9.2</text>
+          <text x="240" y="164" fill="#94a3b8" font-size="9" text-anchor="middle">pIC₅₀ (-log₁₀ M)</text>
+        </svg>
+      </div>
+
+      <!-- 2. Molecular Weight -->
+      <div class="hist-card">
+        <div class="hist-title">Molecular Weight (MW) Distribution</div>
+        <svg viewBox="0 0 450 170" width="100%" height="150">
+          <line x1="45" y1="135" x2="430" y2="135" stroke="#334155" stroke-width="1"/>
+          <line x1="45" y1="20" x2="45" y2="135" stroke="#334155" stroke-width="1"/>
+          <text x="35" y="25" fill="#94a3b8" font-size="9" text-anchor="end">45</text>
+          <text x="35" y="80" fill="#94a3b8" font-size="9" text-anchor="end">22</text>
+          <text x="35" y="135" fill="#94a3b8" font-size="9" text-anchor="end">0</text>
+          <!-- Bars -->
+          <rect x="55" y="110" width="38" height="25" rx="3" fill="#06b6d4" fill-opacity="0.8"/>
+          <rect x="100" y="75" width="38" height="60" rx="3" fill="#06b6d4" fill-opacity="0.8"/>
+          <rect x="145" y="32" width="38" height="103" rx="3" fill="#06b6d4" fill-opacity="0.8"/>
+          <rect x="190" y="25" width="38" height="110" rx="3" fill="#06b6d4" fill-opacity="0.8"/>
+          <rect x="235" y="48" width="38" height="87" rx="3" fill="#06b6d4" fill-opacity="0.8"/>
+          <rect x="280" y="70" width="38" height="65" rx="3" fill="#06b6d4" fill-opacity="0.8"/>
+          <rect x="325" y="100" width="38" height="35" rx="3" fill="#06b6d4" fill-opacity="0.8"/>
+          <rect x="370" y="118" width="38" height="17" rx="3" fill="#06b6d4" fill-opacity="0.8"/>
+          <!-- Labels -->
+          <text x="74" y="148" fill="#64748b" font-size="8" text-anchor="middle">235-280</text>
+          <text x="164" y="148" fill="#64748b" font-size="8" text-anchor="middle">325-370</text>
+          <text x="254" y="148" fill="#64748b" font-size="8" text-anchor="middle">415-460</text>
+          <text x="344" y="148" fill="#64748b" font-size="8" text-anchor="middle">505-550</text>
+          <text x="240" y="164" fill="#94a3b8" font-size="9" text-anchor="middle">Molecular Weight (Da)</text>
+        </svg>
+      </div>
+
+      <!-- 3. LogP -->
+      <div class="hist-card">
+        <div class="hist-title">Lipophilicity (Calculated LogP) Distribution</div>
+        <svg viewBox="0 0 450 170" width="100%" height="150">
+          <line x1="45" y1="135" x2="430" y2="135" stroke="#334155" stroke-width="1"/>
+          <line x1="45" y1="20" x2="45" y2="135" stroke="#334155" stroke-width="1"/>
+          <text x="35" y="25" fill="#94a3b8" font-size="9" text-anchor="end">40</text>
+          <text x="35" y="80" fill="#94a3b8" font-size="9" text-anchor="end">20</text>
+          <text x="35" y="135" fill="#94a3b8" font-size="9" text-anchor="end">0</text>
+          <!-- Bars -->
+          <rect x="55" y="120" width="38" height="15" rx="3" fill="#14b8a6" fill-opacity="0.8"/>
+          <rect x="100" y="90" width="38" height="45" rx="3" fill="#14b8a6" fill-opacity="0.8"/>
+          <rect x="145" y="45" width="38" height="90" rx="3" fill="#14b8a6" fill-opacity="0.8"/>
+          <rect x="190" y="28" width="38" height="107" rx="3" fill="#14b8a6" fill-opacity="0.8"/>
+          <rect x="235" y="35" width="38" height="100" rx="3" fill="#14b8a6" fill-opacity="0.8"/>
+          <rect x="280" y="60" width="38" height="75" rx="3" fill="#14b8a6" fill-opacity="0.8"/>
+          <rect x="325" y="95" width="38" height="40" rx="3" fill="#14b8a6" fill-opacity="0.8"/>
+          <rect x="370" y="122" width="38" height="13" rx="3" fill="#14b8a6" fill-opacity="0.8"/>
+          <!-- Labels -->
+          <text x="74" y="148" fill="#64748b" font-size="8" text-anchor="middle">1.6-2.1</text>
+          <text x="164" y="148" fill="#64748b" font-size="8" text-anchor="middle">2.6-3.1</text>
+          <text x="254" y="148" fill="#64748b" font-size="8" text-anchor="middle">3.6-4.1</text>
+          <text x="344" y="148" fill="#64748b" font-size="8" text-anchor="middle">4.6-5.1</text>
+          <text x="240" y="164" fill="#94a3b8" font-size="9" text-anchor="middle">Calculated LogP</text>
+        </svg>
+      </div>
+
+      <!-- 4. TPSA -->
+      <div class="hist-card">
+        <div class="hist-title">Polar Surface Area (TPSA) Distribution</div>
+        <svg viewBox="0 0 450 170" width="100%" height="150">
+          <line x1="45" y1="135" x2="430" y2="135" stroke="#334155" stroke-width="1"/>
+          <line x1="45" y1="20" x2="45" y2="135" stroke="#334155" stroke-width="1"/>
+          <text x="35" y="25" fill="#94a3b8" font-size="9" text-anchor="end">40</text>
+          <text x="35" y="80" fill="#94a3b8" font-size="9" text-anchor="end">20</text>
+          <text x="35" y="135" fill="#94a3b8" font-size="9" text-anchor="end">0</text>
+          <!-- Bars -->
+          <rect x="55" y="105" width="38" height="30" rx="3" fill="#a855f7" fill-opacity="0.8"/>
+          <rect x="100" y="42" width="38" height="93" rx="3" fill="#a855f7" fill-opacity="0.8"/>
+          <rect x="145" y="30" width="38" height="105" rx="3" fill="#a855f7" fill-opacity="0.8"/>
+          <rect x="190" y="55" width="38" height="80" rx="3" fill="#a855f7" fill-opacity="0.8"/>
+          <rect x="235" y="70" width="38" height="65" rx="3" fill="#a855f7" fill-opacity="0.8"/>
+          <rect x="280" y="90" width="38" height="45" rx="3" fill="#a855f7" fill-opacity="0.8"/>
+          <rect x="325" y="112" width="38" height="23" rx="3" fill="#a855f7" fill-opacity="0.8"/>
+          <rect x="370" y="125" width="38" height="10" rx="3" fill="#a855f7" fill-opacity="0.8"/>
+          <!-- Labels -->
+          <text x="74" y="148" fill="#64748b" font-size="8" text-anchor="middle">40-52</text>
+          <text x="164" y="148" fill="#64748b" font-size="8" text-anchor="middle">64-76</text>
+          <text x="254" y="148" fill="#64748b" font-size="8" text-anchor="middle">88-100</text>
+          <text x="344" y="148" fill="#64748b" font-size="8" text-anchor="middle">112-124</text>
+          <text x="240" y="164" fill="#94a3b8" font-size="9" text-anchor="middle">TPSA (Å²)</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
