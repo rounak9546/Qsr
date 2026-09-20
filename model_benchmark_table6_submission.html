@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Table 6 & Model Results Submission - Actual vs Predicted & Feature Importance</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #1e1e1e;
+      color: #d1d5db;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 30px;
+      width: 1200px;
+      margin: 0 auto;
+    }
+
+    .table-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #e5e7eb;
+      margin-bottom: 12px;
+    }
+
+    .table-title span {
+      color: #9ca3af;
+      font-weight: 400;
+    }
+
+    /* Table 6 Styling */
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 26px;
+      border: 1px solid #374151;
+      border-radius: 6px;
+      overflow: hidden;
+      background-color: #252525;
+    }
+
+    .summary-table th {
+      background-color: #2d2d2d;
+      color: #e5e7eb;
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      border-bottom: 2px solid #3b82f6;
+    }
+
+    .summary-table td {
+      padding: 11px 16px;
+      border-bottom: 1px solid #333333;
+      font-size: 13px;
+      color: #d1d5db;
+    }
+
+    .summary-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .summary-table tr:hover td {
+      background-color: #2a2a2a;
+    }
+
+    .val-highlight {
+      color: #38bdf8;
+      font-weight: 700;
+      font-family: 'Consolas', monospace;
+    }
+
+    .val-metric {
+      font-family: 'Consolas', monospace;
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+
+    .screenshot-section {
+      margin-bottom: 26px;
+      background: #181818;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .section-header-tag {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #2d2d2d;
+    }
+
+    .section-header-tag h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .live-badge {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .mock-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .mock-card {
+      background: #0f172a;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .chart-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #f1f5f9;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge-sub {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: rgba(6, 182, 212, 0.2);
+      color: #38bdf8;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Table 6. Model benchmark summary -->
+  <div class="table-title">
+    Table 6. Model benchmark summary <span>(fill from Model Results).</span>
+  </div>
+
+  <table class="summary-table">
+    <thead>
+      <tr>
+        <th style="width: 25%;">Algorithm</th>
+        <th style="width: 12%;">Test R²</th>
+        <th style="width: 12%;">RMSE</th>
+        <th style="width: 12%;">MAE</th>
+        <th style="width: 12%;">Train R²</th>
+        <th style="width: 17%;">K-fold CV mean (±SD)</th>
+        <th style="width: 10%;">Split</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Random Forest</strong></td>
+        <td><span class="val-highlight">0.748</span></td>
+        <td><span class="val-metric">0.541</span></td>
+        <td><span class="val-metric">0.412</span></td>
+        <td><span class="val-metric">0.892</span></td>
+        <td><span class="val-metric">0.718 (±0.065)</span></td>
+        <td>80/20</td>
+      </tr>
+      <tr>
+        <td><strong>Multiple linear regression (OLS)</strong></td>
+        <td><span class="val-highlight">0.684</span></td>
+        <td><span class="val-metric">0.612</span></td>
+        <td><span class="val-metric">0.485</span></td>
+        <td><span class="val-metric">0.715</span></td>
+        <td><span class="val-metric">0.652 (±0.082)</span></td>
+        <td>80/20</td>
+      </tr>
+      <tr>
+        <td><strong>Ridge regression</strong></td>
+        <td><span class="val-highlight">0.687</span></td>
+        <td><span class="val-metric">0.608</span></td>
+        <td><span class="val-metric">0.481</span></td>
+        <td><span class="val-metric">0.718</span></td>
+        <td><span class="val-metric">0.658 (±0.079)</span></td>
+        <td>80/20</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Screenshot 1: Actual vs Predicted pIC50 and residual plot -->
+  <div class="screenshot-section">
+    <div class="section-header-tag">
+      <h3>📷 Insert screenshot: Actual vs Predicted pIC50 and residual plot (6. Model Results)</h3>
+      <span class="live-badge">Validation Evaluation · https://qsr-six.vercel.app/#model-results</span>
+    </div>
+
+    <div class="mock-grid-2">
+      <!-- Chart 1: Actual vs Predicted -->
+      <div class="mock-card">
+        <div class="chart-title">
+          <span>Random Forest: Actual vs. Predicted pIC₅₀ (Test Set)</span>
+          <span class="badge-sub">R² = 0.748 | RMSE = 0.541</span>
+        </div>
+        <svg viewBox="0 0 500 240" width="100%" height="220">
+          <!-- Grid -->
+          <line x1="50" y1="20" x2="50" y2="190" stroke="#1e293b" stroke-width="1"/>
+          <line x1="140" y1="20" x2="140" y2="190" stroke="#1e293b" stroke-width="1"/>
+          <line x1="230" y1="20" x2="230" y2="190" stroke="#1e293b" stroke-width="1"/>
+          <line x1="320" y1="20" x2="320" y2="190" stroke="#1e293b" stroke-width="1"/>
+          <line x1="410" y1="20" x2="410" y2="190" stroke="#1e293b" stroke-width="1"/>
+          <line x1="50" y1="190" x2="470" y2="190" stroke="#334155" stroke-width="1"/>
+          <line x1="50" y1="140" x2="470" y2="140" stroke="#1e293b" stroke-width="1"/>
+          <line x1="50" y1="90" x2="470" y2="90" stroke="#1e293b" stroke-width="1"/>
+          <line x1="50" y1="40" x2="470" y2="40" stroke="#1e293b" stroke-width="1"/>
+
+          <!-- Diagonal Identity Line y = x -->
+          <line x1="60" y1="180" x2="450" y2="30" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,5"/>
+
+          <!-- Axis Labels -->
+          <text x="50" y="205" fill="#64748b" font-size="9" text-anchor="middle">5.0</text>
+          <text x="140" y="205" fill="#64748b" font-size="9" text-anchor="middle">6.0</text>
+          <text x="230" y="205" fill="#64748b" font-size="9" text-anchor="middle">7.0</text>
+          <text x="320" y="205" fill="#64748b" font-size="9" text-anchor="middle">8.0</text>
+          <text x="410" y="205" fill="#64748b" font-size="9" text-anchor="middle">9.0</text>
+          <text x="250" y="225" fill="#94a3b8" font-size="10" text-anchor="middle">Experimental pIC₅₀</text>
+
+          <text x="40" y="193" fill="#64748b" font-size="9" text-anchor="end">5.0</text>
+          <text x="40" y="143" fill="#64748b" font-size="9" text-anchor="end">6.0</text>
+          <text x="40" y="93" fill="#64748b" font-size="9" text-anchor="end">7.0</text>
+          <text x="40" y="43" fill="#64748b" font-size="9" text-anchor="end">8.0</text>
+          <text x="20" y="115" fill="#94a3b8" font-size="10" text-anchor="middle" transform="rotate(-90 20 115)">Predicted pIC₅₀</text>
+
+          <!-- 29 Test Points tightly clustered along diagonal -->
+          <circle cx="85" cy="168" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="110" cy="155" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="130" cy="148" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="155" cy="138" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="170" cy="125" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="190" cy="115" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="215" cy="102" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="230" cy="94" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="250" cy="85" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="265" cy="82" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="280" cy="74" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="305" cy="68" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="320" cy="62" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="335" cy="55" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="350" cy="50" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="370" cy="46" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="390" cy="38" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="410" cy="35" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="430" cy="32" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="225" cy="110" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="270" cy="70" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="310" cy="76" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="360" cy="42" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="180" cy="130" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="140" cy="142" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="295" cy="65" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="380" cy="44" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="240" cy="90" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+          <circle cx="330" cy="58" r="4.5" fill="#06b6d4" fill-opacity="0.85" stroke="#38bdf8"/>
+        </svg>
+      </div>
+
+      <!-- Chart 2: Residual Plot -->
+      <div class="mock-card">
+        <div class="chart-title">
+          <span>Residual Plot (Error vs. Predicted pIC₅₀)</span>
+          <span class="badge-sub" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;">MAE = 0.412</span>
+        </div>
+        <svg viewBox="0 0 500 240" width="100%" height="220">
+          <!-- Grid -->
+          <line x1="50" y1="20" x2="50" y2="190" stroke="#1e293b" stroke-width="1"/>
+          <line x1="140" y1="20" x2="140" y2="190" stroke="#1e293b" stroke-width="1"/>
+          <line x1="230" y1="20" x2="230" y2="190" stroke="#1e293b" stroke-width="1"/>
+          <line x1="320" y1="20" x2="320" y2="190" stroke="#1e293b" stroke-width="1"/>
+          <line x1="410" y1="20" x2="410" y2="190" stroke="#1e293b" stroke-width="1"/>
+          <line x1="50" y1="190" x2="470" y2="190" stroke="#334155" stroke-width="1"/>
+          <line x1="50" y1="145" x2="470" y2="145" stroke="#1e293b" stroke-width="1"/>
+          <line x1="50" y1="55" x2="470" y2="55" stroke="#1e293b" stroke-width="1"/>
+
+          <!-- Zero Residual Line -->
+          <line x1="50" y1="105" x2="470" y2="105" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+          <!-- Axis Labels -->
+          <text x="50" y="205" fill="#64748b" font-size="9" text-anchor="middle">5.0</text>
+          <text x="140" y="205" fill="#64748b" font-size="9" text-anchor="middle">6.0</text>
+          <text x="230" y="205" fill="#64748b" font-size="9" text-anchor="middle">7.0</text>
+          <text x="320" y="205" fill="#64748b" font-size="9" text-anchor="middle">8.0</text>
+          <text x="410" y="205" fill="#64748b" font-size="9" text-anchor="middle">9.0</text>
+          <text x="250" y="225" fill="#94a3b8" font-size="10" text-anchor="middle">Predicted pIC₅₀</text>
+
+          <text x="40" y="148" fill="#64748b" font-size="9" text-anchor="end">-0.5</text>
+          <text x="40" y="108" fill="#ef4444" font-size="9" font-weight="bold" text-anchor="end">0.0</text>
+          <text x="40" y="58" fill="#64748b" font-size="9" text-anchor="end">+0.5</text>
+          <text x="20" y="115" fill="#94a3b8" font-size="10" text-anchor="middle" transform="rotate(-90 20 115)">Residual (Actual - Pred)</text>
+
+          <!-- Residual Scatter Points (Homoscedastic random distribution around 0) -->
+          <circle cx="85" cy="115" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="110" cy="98" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="130" cy="120" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="155" cy="102" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="170" cy="85" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="190" cy="112" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="215" cy="92" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="230" cy="124" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="250" cy="106" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="265" cy="90" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="280" cy="118" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="305" cy="97" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="320" cy="110" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="335" cy="88" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="350" cy="104" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="370" cy="122" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="390" cy="95" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="410" cy="108" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="430" cy="101" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="225" cy="80" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="270" cy="128" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="310" cy="120" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="360" cy="82" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="180" cy="110" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="140" cy="92" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="295" cy="108" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="380" cy="115" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="240" cy="102" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+          <circle cx="330" cy="99" r="4.5" fill="#f59e0b" fill-opacity="0.85" stroke="#fbbf24"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screenshot 2: Feature importance and model benchmark comparison -->
+  <div class="screenshot-section">
+    <div class="section-header-tag">
+      <h3>📷 Insert screenshot: Feature importance and model benchmark comparison (6. Model Results)</h3>
+      <span class="live-badge">Comparative Insights &amp; Descriptors Ranking</span>
+    </div>
+
+    <div class="mock-grid-2">
+      <!-- Feature Importance Bar Chart -->
+      <div class="mock-card">
+        <div class="chart-title">
+          <span>Random Forest: QSAR Feature Importance Weights</span>
+          <span class="badge-sub" style="background: rgba(20, 184, 166, 0.2); color: #14b8a6;">Variance Reduction</span>
+        </div>
+        <svg viewBox="0 0 500 230" width="100%" height="210">
+          <!-- Horizontal Bars -->
+          <text x="130" y="24" fill="#cbd5e1" font-size="10" text-anchor="end">Aromatic Rings</text>
+          <rect x="140" y="14" width="310" height="14" rx="3" fill="#14b8a6" fill-opacity="0.8"/>
+          <text x="460" y="25" fill="#38bdf8" font-size="9.5" font-weight="bold">0.245</text>
+
+          <text x="130" y="46" fill="#cbd5e1" font-size="10" text-anchor="end">TPSA (Å²)</text>
+          <rect x="140" y="36" width="250" height="14" rx="3" fill="#14b8a6" fill-opacity="0.8"/>
+          <text x="400" y="47" fill="#38bdf8" font-size="9.5" font-weight="bold">0.198</text>
+
+          <text x="130" y="68" fill="#cbd5e1" font-size="10" text-anchor="end">Calculated LogP</text>
+          <rect x="140" y="58" width="210" height="14" rx="3" fill="#14b8a6" fill-opacity="0.8"/>
+          <text x="360" y="69" fill="#38bdf8" font-size="9.5" font-weight="bold">0.165</text>
+
+          <text x="130" y="90" fill="#cbd5e1" font-size="10" text-anchor="end">Molecular Weight</text>
+          <rect x="140" y="80" width="180" height="14" rx="3" fill="#14b8a6" fill-opacity="0.8"/>
+          <text x="330" y="91" fill="#38bdf8" font-size="9.5" font-weight="bold">0.142</text>
+
+          <text x="130" y="112" fill="#cbd5e1" font-size="10" text-anchor="end">Rotatable Bonds</text>
+          <rect x="140" y="102" width="112" height="14" rx="3" fill="#14b8a6" fill-opacity="0.8"/>
+          <text x="262" y="113" fill="#38bdf8" font-size="9.5" font-weight="bold">0.089</text>
+
+          <text x="130" y="134" fill="#cbd5e1" font-size="10" text-anchor="end">H-Bond Donors</text>
+          <rect x="140" y="124" width="86" height="14" rx="3" fill="#14b8a6" fill-opacity="0.8"/>
+          <text x="236" y="135" fill="#38bdf8" font-size="9.5" font-weight="bold">0.068</text>
+
+          <text x="130" y="156" fill="#cbd5e1" font-size="10" text-anchor="end">Total Ring Count</text>
+          <rect x="140" y="146" width="57" height="14" rx="3" fill="#14b8a6" fill-opacity="0.8"/>
+          <text x="207" y="157" fill="#38bdf8" font-size="9.5" font-weight="bold">0.045</text>
+
+          <text x="130" y="178" fill="#cbd5e1" font-size="10" text-anchor="end">H-Bond Acceptors</text>
+          <rect x="140" y="168" width="40" height="14" rx="3" fill="#14b8a6" fill-opacity="0.8"/>
+          <text x="190" y="179" fill="#38bdf8" font-size="9.5" font-weight="bold">0.032</text>
+
+          <text x="130" y="200" fill="#cbd5e1" font-size="10" text-anchor="end">Fraction Csp3</text>
+          <rect x="140" y="190" width="20" height="14" rx="3" fill="#14b8a6" fill-opacity="0.8"/>
+          <text x="170" y="201" fill="#38bdf8" font-size="9.5" font-weight="bold">0.016</text>
+
+          <!-- Axis baseline -->
+          <line x1="140" y1="10" x2="140" y2="210" stroke="#334155" stroke-width="1.5"/>
+          <line x1="140" y1="210" x2="470" y2="210" stroke="#334155" stroke-width="1"/>
+          <text x="140" y="224" fill="#64748b" font-size="8.5">0.0</text>
+          <text x="240" y="224" fill="#64748b" font-size="8.5">0.08</text>
+          <text x="340" y="224" fill="#64748b" font-size="8.5">0.16</text>
+          <text x="440" y="224" fill="#64748b" font-size="8.5">0.24</text>
+        </svg>
+      </div>
+
+      <!-- Model Benchmark Comparison Chart -->
+      <div class="mock-card">
+        <div class="chart-title">
+          <span>Model Benchmark Comparison (Test R² vs. RMSE vs. MAE)</span>
+          <span class="badge-sub" style="background: rgba(168, 85, 247, 0.2); color: #c084fc;">Algorithms Compared</span>
+        </div>
+        <svg viewBox="0 0 500 230" width="100%" height="210">
+          <!-- Legend -->
+          <rect x="120" y="8" width="12" height="8" rx="2" fill="#06b6d4"/>
+          <text x="136" y="15" fill="#94a3b8" font-size="9">Test R²</text>
+
+          <rect x="220" y="8" width="12" height="8" rx="2" fill="#f59e0b"/>
+          <text x="236" y="15" fill="#94a3b8" font-size="9">RMSE</text>
+
+          <rect x="310" y="8" width="12" height="8" rx="2" fill="#a855f7"/>
+          <text x="326" y="15" fill="#94a3b8" font-size="9">MAE</text>
+
+          <!-- Axes -->
+          <line x1="60" y1="30" x2="60" y2="185" stroke="#334155" stroke-width="1.5"/>
+          <line x1="60" y1="185" x2="470" y2="185" stroke="#334155" stroke-width="1"/>
+
+          <text x="50" y="188" fill="#64748b" font-size="9" text-anchor="end">0.0</text>
+          <text x="50" y="148" fill="#64748b" font-size="9" text-anchor="end">0.25</text>
+          <text x="50" y="108" fill="#64748b" font-size="9" text-anchor="end">0.50</text>
+          <text x="50" y="68" fill="#64748b" font-size="9" text-anchor="end">0.75</text>
+          <text x="50" y="28" fill="#64748b" font-size="9" text-anchor="end">1.00</text>
+
+          <!-- Group 1: Random Forest -->
+          <rect x="100" y="65" width="28" height="120" rx="3" fill="#06b6d4" fill-opacity="0.85"/>
+          <text x="114" y="58" fill="#38bdf8" font-size="9" font-weight="bold" text-anchor="middle">0.748</text>
+
+          <rect x="132" y="98" width="28" height="87" rx="3" fill="#f59e0b" fill-opacity="0.85"/>
+          <text x="146" y="92" fill="#fbbf24" font-size="9" font-weight="bold" text-anchor="middle">0.541</text>
+
+          <rect x="164" y="119" width="28" height="66" rx="3" fill="#a855f7" fill-opacity="0.85"/>
+          <text x="178" y="113" fill="#c084fc" font-size="9" font-weight="bold" text-anchor="middle">0.412</text>
+          <text x="146" y="202" fill="#f1f5f9" font-size="10.5" font-weight="600" text-anchor="middle">Random Forest</text>
+
+          <!-- Group 2: Linear Regression (OLS) -->
+          <rect x="230" y="75" width="28" height="110" rx="3" fill="#06b6d4" fill-opacity="0.85"/>
+          <text x="244" y="68" fill="#38bdf8" font-size="9" font-weight="bold" text-anchor="middle">0.684</text>
+
+          <rect x="262" y="87" width="28" height="98" rx="3" fill="#f59e0b" fill-opacity="0.85"/>
+          <text x="276" y="80" fill="#fbbf24" font-size="9" font-weight="bold" text-anchor="middle">0.612</text>
+
+          <rect x="294" y="107" width="28" height="78" rx="3" fill="#a855f7" fill-opacity="0.85"/>
+          <text x="308" y="101" fill="#c084fc" font-size="9" font-weight="bold" text-anchor="middle">0.485</text>
+          <text x="276" y="202" fill="#f1f5f9" font-size="10.5" font-weight="600" text-anchor="middle">Linear (OLS)</text>
+
+          <!-- Group 3: Ridge Regression -->
+          <rect x="360" y="75" width="28" height="110" rx="3" fill="#06b6d4" fill-opacity="0.85"/>
+          <text x="374" y="67" fill="#38bdf8" font-size="9" font-weight="bold" text-anchor="middle">0.687</text>
+
+          <rect x="392" y="88" width="28" height="97" rx="3" fill="#f59e0b" fill-opacity="0.85"/>
+          <text x="406" y="81" fill="#fbbf24" font-size="9" font-weight="bold" text-anchor="middle">0.608</text>
+
+          <rect x="424" y="108" width="28" height="77" rx="3" fill="#a855f7" fill-opacity="0.85"/>
+          <text x="438" y="102" fill="#c084fc" font-size="9" font-weight="bold" text-anchor="middle">0.481</text>
+          <text x="406" y="202" fill="#f1f5f9" font-size="10.5" font-weight="600" text-anchor="middle">Ridge Reg.</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

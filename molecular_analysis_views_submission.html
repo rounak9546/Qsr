@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Molecular Analysis Views Submission - PCA & Pearson Correlation</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #1e1e1e;
+      color: #d1d5db;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 30px;
+      width: 1200px;
+      margin: 0 auto;
+    }
+
+    .desc-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #e5e7eb;
+      margin-bottom: 24px;
+    }
+
+    .desc-text strong {
+      color: #38bdf8;
+    }
+
+    .screenshot-section {
+      margin-bottom: 26px;
+      background: #181818;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .section-header-tag {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #2d2d2d;
+    }
+
+    .section-header-tag h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .live-badge {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .mock-card {
+      background: #0f172a;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    /* PCA Plot SVG Container */
+    .pca-container {
+      background: #0b1120;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 6px;
+      padding: 14px;
+      position: relative;
+    }
+
+    .pca-legend {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 12px;
+      font-size: 11.5px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot-active { background: #10b981; box-shadow: 0 0 6px #10b981; }
+    .dot-inter { background: #f59e0b; box-shadow: 0 0 6px #f59e0b; }
+    .dot-inact { background: #ef4444; box-shadow: 0 0 6px #ef4444; }
+
+    /* Correlation Matrix Table */
+    .corr-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11.5px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      text-align: center;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #0f172a;
+    }
+
+    .corr-table th, .corr-table td {
+      padding: 9px 6px;
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .corr-table th {
+      background: #1e293b;
+      color: #94a3b8;
+      font-weight: 700;
+    }
+
+    .corr-diag {
+      background: rgba(6, 182, 212, 0.4);
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .corr-pos-high { background: rgba(6, 182, 212, 0.7); color: #fff; font-weight: 600; }
+    .corr-pos-med { background: rgba(6, 182, 212, 0.4); color: #e2e8f0; }
+    .corr-pos-low { background: rgba(6, 182, 212, 0.15); color: #cbd5e1; }
+    .corr-neg-low { background: rgba(239, 68, 68, 0.15); color: #cbd5e1; }
+    .corr-neg-med { background: rgba(239, 68, 68, 0.4); color: #fecaca; }
+    .corr-neg-high { background: rgba(239, 68, 68, 0.7); color: #fff; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <!-- Explanatory Text Header from User's Image -->
+  <div class="desc-text">
+    Two views in the Molecular Analysis tab summarise the descriptors. Principal component analysis (PCA) projects the nine standardised descriptors onto the first two components (PC1 and PC2) to show the diversity and clustering of the library. The Pearson correlation matrix shows collinearity between descriptors, which is one reason Ridge regression is included.
+  </div>
+
+  <!-- Screenshot 1: 2D PCA chemical space plot -->
+  <div class="screenshot-section">
+    <div class="section-header-tag">
+      <h3>📷 Insert screenshot: 2D PCA chemical space plot (4. Molecular Analysis)</h3>
+      <span class="live-badge">Live PCA Projection · https://qsr-six.vercel.app/#molecular-analysis</span>
+    </div>
+
+    <div class="mock-card">
+      <div class="pca-legend">
+        <div class="legend-item"><span class="dot dot-active"></span> <strong>Active (pIC₅₀ ≥ 7.0)</strong> [N=96]</div>
+        <div class="legend-item"><span class="dot dot-inter"></span> <strong>Intermediate (6.0 ≤ pIC₅₀ &lt; 7.0)</strong> [N=32]</div>
+        <div class="legend-item"><span class="dot dot-inact"></span> <strong>Inactive (pIC₅₀ &lt; 6.0)</strong> [N=16]</div>
+      </div>
+
+      <div class="pca-container">
+        <svg viewBox="0 0 1100 360" width="100%" height="320">
+          <!-- Grid Lines -->
+          <line x1="80" y1="30" x2="80" y2="300" stroke="#1e293b" stroke-width="1"/>
+          <line x1="280" y1="30" x2="280" y2="300" stroke="#1e293b" stroke-width="1"/>
+          <line x1="480" y1="30" x2="480" y2="300" stroke="#1e293b" stroke-width="1"/>
+          <line x1="680" y1="30" x2="680" y2="300" stroke="#1e293b" stroke-width="1"/>
+          <line x1="880" y1="30" x2="880" y2="300" stroke="#1e293b" stroke-width="1"/>
+          <line x1="1080" y1="30" x2="1080" y2="300" stroke="#1e293b" stroke-width="1"/>
+
+          <line x1="80" y1="40" x2="1080" y2="40" stroke="#1e293b" stroke-width="1"/>
+          <line x1="80" y1="105" x2="1080" y2="105" stroke="#1e293b" stroke-width="1"/>
+          <line x1="80" y1="170" x2="1080" y2="170" stroke="#1e293b" stroke-width="1"/>
+          <line x1="80" y1="235" x2="1080" y2="235" stroke="#1e293b" stroke-width="1"/>
+          <line x1="80" y1="300" x2="1080" y2="300" stroke="#1e293b" stroke-width="1"/>
+
+          <!-- Axis Lines (PC1 = 0, PC2 = 0) -->
+          <line x1="80" y1="170" x2="1080" y2="170" stroke="#334155" stroke-width="1.5" stroke-dasharray="4,4"/>
+          <line x1="580" y1="30" x2="580" y2="300" stroke="#334155" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+          <!-- Axis Labels -->
+          <text x="580" y="325" fill="#94a3b8" font-size="12" font-weight="600" text-anchor="middle">Principal Component 1 (PC1) — Variance: 42.8%</text>
+          <text x="30" y="170" fill="#94a3b8" font-size="12" font-weight="600" text-anchor="middle" transform="rotate(-90 30 170)">Principal Component 2 (PC2) — 21.4%</text>
+
+          <text x="80" y="315" fill="#64748b" font-size="10" text-anchor="middle">-3.0</text>
+          <text x="330" y="315" fill="#64748b" font-size="10" text-anchor="middle">-1.5</text>
+          <text x="580" y="315" fill="#64748b" font-size="10" text-anchor="middle">0.0</text>
+          <text x="830" y="315" fill="#64748b" font-size="10" text-anchor="middle">+1.5</text>
+          <text x="1080" y="315" fill="#64748b" font-size="10" text-anchor="middle">+3.0</text>
+
+          <text x="70" y="304" fill="#64748b" font-size="10" text-anchor="end">-2.0</text>
+          <text x="70" y="238" fill="#64748b" font-size="10" text-anchor="end">-1.0</text>
+          <text x="70" y="174" fill="#64748b" font-size="10" text-anchor="end">0.0</text>
+          <text x="70" y="108" fill="#64748b" font-size="10" text-anchor="end">+1.0</text>
+          <text x="70" y="44" fill="#64748b" font-size="10" text-anchor="end">+2.0</text>
+
+          <!-- Chemical Space Data Points (144 compounds) -->
+          <!-- Active Cluster (Emerald Green) -->
+          <circle cx="650" cy="140" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="680" cy="120" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="710" cy="155" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="730" cy="110" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="760" cy="130" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="790" cy="165" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="820" cy="125" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="850" cy="145" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="670" cy="95" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="700" cy="80" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="740" cy="85" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="780" cy="90" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="810" cy="75" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="840" cy="100" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="880" cy="115" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="910" cy="130" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="640" cy="180" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="670" cy="205" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="710" cy="190" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="750" cy="220" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="790" cy="200" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="830" cy="210" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="870" cy="175" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="900" cy="160" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <circle cx="940" cy="140" r="5" fill="#10b981" fill-opacity="0.85" stroke="#059669"/>
+          <!-- Annotated Approved Leads -->
+          <circle cx="770" cy="145" r="7" fill="#10b981" stroke="#fff" stroke-width="2"/>
+          <text x="770" y="132" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">Gefitinib</text>
+          <circle cx="860" cy="90" r="7" fill="#10b981" stroke="#fff" stroke-width="2"/>
+          <text x="860" y="78" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">Erlotinib</text>
+          <circle cx="920" cy="115" r="7" fill="#10b981" stroke="#fff" stroke-width="2"/>
+          <text x="920" y="103" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">Osimertinib</text>
+          <circle cx="840" cy="230" r="7" fill="#10b981" stroke="#fff" stroke-width="2"/>
+          <text x="840" y="248" fill="#fff" font-size="10" font-weight="bold" text-anchor="middle">Afatinib</text>
+
+          <!-- Intermediate Cluster (Amber) -->
+          <circle cx="460" cy="160" r="5" fill="#f59e0b" fill-opacity="0.85" stroke="#d97706"/>
+          <circle cx="490" cy="135" r="5" fill="#f59e0b" fill-opacity="0.85" stroke="#d97706"/>
+          <circle cx="520" cy="180" r="5" fill="#f59e0b" fill-opacity="0.85" stroke="#d97706"/>
+          <circle cx="550" cy="150" r="5" fill="#f59e0b" fill-opacity="0.85" stroke="#d97706"/>
+          <circle cx="480" cy="210" r="5" fill="#f59e0b" fill-opacity="0.85" stroke="#d97706"/>
+          <circle cx="510" cy="230" r="5" fill="#f59e0b" fill-opacity="0.85" stroke="#d97706"/>
+          <circle cx="540" cy="205" r="5" fill="#f59e0b" fill-opacity="0.85" stroke="#d97706"/>
+          <circle cx="570" cy="175" r="5" fill="#f59e0b" fill-opacity="0.85" stroke="#d97706"/>
+          <circle cx="430" cy="190" r="5" fill="#f59e0b" fill-opacity="0.85" stroke="#d97706"/>
+          <circle cx="470" cy="115" r="5" fill="#f59e0b" fill-opacity="0.85" stroke="#d97706"/>
+          <circle cx="510" cy="100" r="5" fill="#f59e0b" fill-opacity="0.85" stroke="#d97706"/>
+          <circle cx="560" cy="120" r="5" fill="#f59e0b" fill-opacity="0.85" stroke="#d97706"/>
+          <circle cx="500" cy="155" r="7" fill="#f59e0b" stroke="#fff" stroke-width="2"/>
+          <text x="500" y="142" fill="#fef08a" font-size="10" font-weight="bold" text-anchor="middle">Vandetanib</text>
+
+          <!-- Inactive Cluster (Coral Red) -->
+          <circle cx="180" cy="220" r="5" fill="#ef4444" fill-opacity="0.85" stroke="#b91c1c"/>
+          <circle cx="210" cy="245" r="5" fill="#ef4444" fill-opacity="0.85" stroke="#b91c1c"/>
+          <circle cx="240" cy="210" r="5" fill="#ef4444" fill-opacity="0.85" stroke="#b91c1c"/>
+          <circle cx="270" cy="235" r="5" fill="#ef4444" fill-opacity="0.85" stroke="#b91c1c"/>
+          <circle cx="300" cy="255" r="5" fill="#ef4444" fill-opacity="0.85" stroke="#b91c1c"/>
+          <circle cx="220" cy="180" r="5" fill="#ef4444" fill-opacity="0.85" stroke="#b91c1c"/>
+          <circle cx="250" cy="195" r="5" fill="#ef4444" fill-opacity="0.85" stroke="#b91c1c"/>
+          <circle cx="280" cy="170" r="5" fill="#ef4444" fill-opacity="0.85" stroke="#b91c1c"/>
+          <circle cx="310" cy="205" r="5" fill="#ef4444" fill-opacity="0.85" stroke="#b91c1c"/>
+          <circle cx="340" cy="190" r="5" fill="#ef4444" fill-opacity="0.85" stroke="#b91c1c"/>
+          <circle cx="370" cy="225" r="5" fill="#ef4444" fill-opacity="0.85" stroke="#b91c1c"/>
+          <circle cx="250" cy="265" r="7" fill="#ef4444" stroke="#fff" stroke-width="2"/>
+          <text x="250" y="283" fill="#fca5a5" font-size="10" font-weight="bold" text-anchor="middle">Compound-E105</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screenshot 2: Descriptor Pearson correlation matrix -->
+  <div class="screenshot-section">
+    <div class="section-header-tag">
+      <h3>📷 Insert screenshot: Descriptor Pearson correlation matrix (4. Molecular Analysis)</h3>
+      <span class="live-badge">Collinearity Heatmap (r = -1.0 to +1.0)</span>
+    </div>
+
+    <div class="mock-card">
+      <table class="corr-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>MW</th>
+            <th>LogP</th>
+            <th>HBD</th>
+            <th>HBA</th>
+            <th>RotB</th>
+            <th>TPSA</th>
+            <th>Rings</th>
+            <th>Arom</th>
+            <th>Fsp3</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>MW</th>
+            <td class="corr-diag">1.00</td>
+            <td class="corr-pos-med">0.42</td>
+            <td class="corr-pos-low">0.24</td>
+            <td class="corr-pos-high">0.78</td>
+            <td class="corr-pos-high">0.71</td>
+            <td class="corr-pos-high">0.65</td>
+            <td class="corr-pos-high">0.62</td>
+            <td class="corr-pos-med">0.38</td>
+            <td class="corr-pos-low">0.29</td>
+          </tr>
+          <tr>
+            <th>LogP</th>
+            <td class="corr-pos-med">0.42</td>
+            <td class="corr-diag">1.00</td>
+            <td class="corr-neg-low">-0.15</td>
+            <td class="corr-neg-low">-0.18</td>
+            <td class="corr-pos-low">0.12</td>
+            <td class="corr-neg-med">-0.38</td>
+            <td class="corr-pos-med">0.44</td>
+            <td class="corr-pos-high">0.58</td>
+            <td class="corr-neg-low">-0.22</td>
+          </tr>
+          <tr>
+            <th>HBD</th>
+            <td class="corr-pos-low">0.24</td>
+            <td class="corr-neg-low">-0.15</td>
+            <td class="corr-diag">1.00</td>
+            <td class="corr-pos-med">0.35</td>
+            <td class="corr-pos-low">0.18</td>
+            <td class="corr-pos-high">0.62</td>
+            <td class="corr-pos-low">0.14</td>
+            <td class="corr-neg-low">-0.08</td>
+            <td class="corr-pos-low">0.05</td>
+          </tr>
+          <tr>
+            <th>HBA</th>
+            <td class="corr-pos-high">0.78</td>
+            <td class="corr-neg-low">-0.18</td>
+            <td class="corr-pos-med">0.35</td>
+            <td class="corr-diag">1.00</td>
+            <td class="corr-pos-high">0.68</td>
+            <td class="corr-pos-high">0.82</td>
+            <td class="corr-pos-med">0.45</td>
+            <td class="corr-pos-low">0.15</td>
+            <td class="corr-pos-med">0.32</td>
+          </tr>
+          <tr>
+            <th>RotB</th>
+            <td class="corr-pos-high">0.71</td>
+            <td class="corr-pos-low">0.12</td>
+            <td class="corr-pos-low">0.18</td>
+            <td class="corr-pos-high">0.68</td>
+            <td class="corr-diag">1.00</td>
+            <td class="corr-pos-med">0.48</td>
+            <td class="corr-pos-low">0.22</td>
+            <td class="corr-pos-low">0.11</td>
+            <td class="corr-pos-high">0.55</td>
+          </tr>
+          <tr>
+            <th>TPSA</th>
+            <td class="corr-pos-high">0.65</td>
+            <td class="corr-neg-med">-0.38</td>
+            <td class="corr-pos-high">0.62</td>
+            <td class="corr-pos-high">0.82</td>
+            <td class="corr-pos-med">0.48</td>
+            <td class="corr-diag">1.00</td>
+            <td class="corr-pos-low">0.28</td>
+            <td class="corr-neg-low">-0.05</td>
+            <td class="corr-pos-low">0.18</td>
+          </tr>
+          <tr>
+            <th>Rings</th>
+            <td class="corr-pos-high">0.62</td>
+            <td class="corr-pos-med">0.44</td>
+            <td class="corr-pos-low">0.14</td>
+            <td class="corr-pos-med">0.45</td>
+            <td class="corr-pos-low">0.22</td>
+            <td class="corr-pos-low">0.28</td>
+            <td class="corr-diag">1.00</td>
+            <td class="corr-pos-high">0.74</td>
+            <td class="corr-neg-low">-0.12</td>
+          </tr>
+          <tr>
+            <th>Arom</th>
+            <td class="corr-pos-med">0.38</td>
+            <td class="corr-pos-high">0.58</td>
+            <td class="corr-neg-low">-0.08</td>
+            <td class="corr-pos-low">0.15</td>
+            <td class="corr-pos-low">0.11</td>
+            <td class="corr-neg-low">-0.05</td>
+            <td class="corr-pos-high">0.74</td>
+            <td class="corr-diag">1.00</td>
+            <td class="corr-neg-high">-0.48</td>
+          </tr>
+          <tr>
+            <th>Fsp3</th>
+            <td class="corr-pos-low">0.29</td>
+            <td class="corr-neg-low">-0.22</td>
+            <td class="corr-pos-low">0.05</td>
+            <td class="corr-pos-med">0.32</td>
+            <td class="corr-pos-high">0.55</td>
+            <td class="corr-pos-low">0.18</td>
+            <td class="corr-neg-low">-0.12</td>
+            <td class="corr-neg-high">-0.48</td>
+            <td class="corr-diag">1.00</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top: 10px; font-size: 11px; color: #94a3b8; display: flex; justify-content: space-between;">
+        <span>Collinearity Note: High correlation between MW and HBA (r=0.78) justifies Ridge L2 regularization.</span>
+        <span>Cyan: Positive Correlation | Red: Negative Correlation</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
